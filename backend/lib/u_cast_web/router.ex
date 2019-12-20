@@ -16,5 +16,4 @@ defmodule UCastWeb.Router do
       schema: UCastWeb.Schema.Schema,
       socket: UCastWeb.UserSocket
   end
-
 end

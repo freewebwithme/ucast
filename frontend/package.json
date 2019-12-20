@@ -36,7 +36,9 @@
     "react-navigation-tabs": "^2.6.2"
   },
   "devDependencies": {
-    "babel-preset-expo": "^7.1.0"
+    "babel-preset-expo": "^7.1.0",
+    "eslint": "^6.7.2",
+    "eslint-plugin-react": "^7.17.0"
   },
   "private": true
 }
