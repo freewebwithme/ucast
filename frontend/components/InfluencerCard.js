@@ -1,28 +1,31 @@
-import React from 'react';
-import {ScrollView, View, Text, Image, StyleSheet} from 'react-native';
-import {useQuery} from '@apollo/react-hooks';
+import React from "react";
+import { ScrollView, View, Text, Image, StyleSheet } from "react-native";
 
-export default function InfluencerCard({loading, error, data}) {
-
+export default function InfluencerCard({ loading, error, data }) {
   if (loading) return <Text>Loading...</Text>;
   if (error) return <Text>Error...${error.message}</Text>;
 
   return (
     <View>
       <ScrollView horizontal={true}>
-        {data.users.map(user => (
-          <View key={user.id} style={styles.card}>
+        {data.influencer.map(influencer => (
+          <View key={influencer.id} style={styles.card}>
             <View style={styles.user}>
               <Image
                 style={styles.image}
                 resizeMode="cover"
                 source={{
-                  uri:
-                    'https://s3.amazonaws.com/uifaces/faces/twitter/brynn/128.jpg',
+                  uri: influencer.avatarUrl
                 }}
               />
-              <Text>{user.name}</Text>
-              <Text>{user.userType}</Text>
+              <Text>{influencer.name}</Text>
+              <Text>{influencer.influencerProfile.category}</Text>
+              {influencer.influencerProfile.tags.map(tag => (
+		// TODO : Create unique key....
+                <View key={influencer.id + tag.name}>
+		  <Text>{tag.name}</Text>
+		</View>
+              ))}
             </View>
           </View>
         ))}
@@ -33,14 +36,14 @@ export default function InfluencerCard({loading, error, data}) {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flex: 1
   },
   image: {
-    width: 100,
-    height: 100,
+    width: 150,
+    height: 150
   },
   card: {
     padding: 5,
-    borderColor: '#fff',
-  },
+    borderColor: "#fff"
+  }
 });
