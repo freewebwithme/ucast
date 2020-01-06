@@ -18,6 +18,10 @@ defmodule UCastWeb.Resolvers.Accounts do
     {:ok, Accounts.get_user(id)}
   end
 
+  def get_influencers(_, args, _) do
+    {:ok, Accounts.get_influencers(args)}
+  end
+
   def sign_in(_, %{username: username, password: password}, _) do
     case Accounts.authenticate(username, password) do
       {:ok, user} ->

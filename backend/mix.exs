@@ -49,6 +49,8 @@ defmodule UCast.MixProject do
       {:pbkdf2_elixir, "~> 1.0"},
       {:uuid, "~> 1.1"},
       {:waffle, "~> 0.0.3"},
+      {:dataloader, "~> 1.0"},
+
       # AWS
       {:ex_aws, "~> 2.1"},
       {:ex_aws_s3, "~> 2.0"},

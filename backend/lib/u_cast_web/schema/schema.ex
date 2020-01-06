@@ -2,7 +2,10 @@ defmodule UCastWeb.Schema.Schema do
   use Absinthe.Schema
   alias UCastWeb.Resolvers
   alias UCastWeb.Schema.Middleware
+  alias UCast.Accounts
+  import Absinthe.Resolution.Helpers, only: [dataloader: 1, dataloader: 3]
 
+  
   def middleware(middleware, _field, %{identifier: :mutation}) do
     middleware ++ [Middleware.ChangesetErrors]
   end
@@ -26,6 +29,13 @@ defmodule UCastWeb.Schema.Schema do
     @desc "Get the currently signed-in user"
     field :me, :user do
       resolve &Resolvers.Accounts.me/3
+    end
+
+    @desc "Get only influencer"
+    field :influencer, list_of(:user) do
+      arg :limit, :integer
+      arg :category, :string
+      resolve &Resolvers.Accounts.get_influencers/3
     end
   end
 
@@ -81,12 +91,10 @@ defmodule UCastWeb.Schema.Schema do
     field :intro, :string
     field :user_type, non_null(:string)
 
-    field :profile, :profile do
-      resolve &Resolvers.Accounts.get_profile/3
-    end
+    field :influencer_profile, :influencer_profile, resolve: dataloader(Users) 
   end
 
-  object :profile do
+  object :influencer_profile do
     field :phone_number, non_null(:string)
     field :sns_type, non_null(:sns_type) do
       # In database, sns_type is string, so when fetch it
@@ -99,5 +107,22 @@ defmodule UCastWeb.Schema.Schema do
     field :sns_url, non_null(:string)
     field :follower_count, non_null(:string)
     field :active, non_null(:boolean)
+    field :category, non_null(:string)
+    field :tags, list_of(:tags), resolve: dataloader(Users) 
+  end
+
+  object :tags do
+    field :name, non_null(:string)
+  end
+
+  def context(ctx) do
+    loader = 
+      Dataloader.new
+      |> Dataloader.add_source(Users, Accounts.datasource())
+    Map.put(ctx, :loader, loader)
+  end
+
+  def plugins do
+    [Absinthe.Middleware.Dataloader] ++ Absinthe.Plugin.defaults()
   end
 end

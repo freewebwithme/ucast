@@ -1,6 +1,7 @@
 defmodule UCast.Accounts.User do
   use Ecto.Schema
   import Ecto.Changeset
+  alias UCast.Accounts.User
 
   schema "users" do
     field :email, :string
@@ -16,10 +17,10 @@ defmodule UCast.Accounts.User do
   end
 
   @doc false
-  def changeset(user, attrs) do
+  def changeset(%User{}= user, attrs) do
     required_fields = [:email, :password, :username, :name] 
     user
-    |> cast(attrs, required_fields ++ [:user_type]) 
+    |> cast(attrs, required_fields ++ [:user_type, :avatar_url, :intro,]) 
     |> unique_constraint(:username, name: :users_email_username_index)
     |> validate_required(required_fields)
     |> validate_length(:username, min: 3)

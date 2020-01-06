@@ -3,10 +3,38 @@ defmodule UCast.Seeds do
   alias UCast.Repo
   alias UCast.Accounts.{User, InfluencerProfile}
 
+  @tags  ["Youtuber, Mc", "Entertainer, Actor", "Comedian, MC, Entertainer", "Singer, Teacher", "Comedian, Actor, Model", "Entrepreneur, Real housewife"]
+  @category  ["엠씨", "코메디언", "가수", "작곡가", "유투버", "프로게이머", "컨텐츠 크리에이터", "작사가", "운동선수", "헬스 트레이너"]
+  @urls  ["https://ucastprofilepic.s3-us-west-2.amazonaws.com/adult-beard-boy-casual-220453.jpg", "https://ucastprofilepic.s3-us-west-2.amazonaws.com/women-s-white-and-black-button-up-collared-shirt-774909.jpg",
+    "https://ucastprofilepic.s3-us-west-2.amazonaws.com/close-up-photo-of-woman-1680693.jpg", "https://ucastprofilepic.s3-us-west-2.amazonaws.com/closeup-photo-of-woman-with-brown-coat-and-gray-top-733872.jpg",
+    "https://ucastprofilepic.s3-us-west-2.amazonaws.com/face-facial-hair-fine-looking-guy-614810.jpg", "https://ucastprofilepic.s3-us-west-2.amazonaws.com/man-wearing-black-zip-up-jacket-near-beach-smiling-at-the-736716.jpg",
+    "https://ucastprofilepic.s3-us-west-2.amazonaws.com/woman-in-black-scoop-neck-shirt-smiling-38554.jpg", "https://ucastprofilepic.s3-us-west-2.amazonaws.com/woman-wearing-black-eyeglasses-1239291.jpg"]
+  @sns_names  ["intagram", "youtube", "facebook", "twitter"]
+
+
   def run() do
 
+    for x <- 0..20 do
+      attrs = %{
+        name: "김구라#{x}",
+        email: "user#{x}@example.com",
+        password: "secret",
+        username: "kimgura#{x}",
+        avatar_url: Enum.random(@urls),
+        intro: "Hello this is kimgura#{x}",
+        user_type: "influencer",
+        follower_count: "231231",
+        sns_type: Enum.random(@sns_names),
+        sns_url: "www.instagram.com/user#{x}",
+        phone_number: "213-444-6666",
+        category: Enum.random(@category),
+        tags: Enum.random(@tags)
+      }
+      UCast.Accounts.create_influencer(attrs)
+    end
+
     # Users
-    taehwan =
+    _taehwan =
       %User{}
       |> User.changeset(%{
         username: "taedori",
@@ -18,7 +46,7 @@ defmodule UCast.Seeds do
         user_type: "customer"
       })
       |> Repo.insert!
-    jihye =
+    _jihye =
       %User{}
       |> User.changeset(%{
         username: "jihye",
@@ -30,7 +58,7 @@ defmodule UCast.Seeds do
         user_type: "customer"
       })
       |> Repo.insert!
-    yoonseo =
+    _yoonseo =
       %User{}
       |> User.changeset(%{
         username: "yoonseo",
@@ -42,21 +70,5 @@ defmodule UCast.Seeds do
         user_type: "customer"
       })
       |> Repo.insert!
-
-
-    bruce_willis = 
-     UCast.Accounts.create_influencer(
-        %{name: "Bruce Willis",
-          email: "bruce@example.com",
-          username: "brucewillis",
-          password: "secret",
-          avatar_url: "image_url",
-          intro: "Hello I am Bruce",
-          follower_count: "1002340",
-          sns_type: "instagram",
-          sns_url: "www.instagram.com/brucewillis",
-          phone_number: "2134445555"}
-      )
-    :ok
   end
 end

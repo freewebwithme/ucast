@@ -39,6 +39,26 @@ defmodule UCast.Accounts do
   def get_user(id), do: Repo.get(User, id)
 
   @doc """
+  Get influencers from all user
+  criteria - map of arguments. default is %{}
+  {:limit, 5}
+  {:category, "Youtuber"}
+  """
+  def get_influencers(criteria \\ %{}) do
+    query = from i in User, where: i.user_type == "influencer"
+
+    Enum.reduce(criteria, query, fn
+      {:limit, limit}, query ->
+        from u in query, limit: ^limit
+      {:category, category}, query ->
+        from u in query,
+          join: ip in InfluencerProfile,
+          where: ip.user_id == u.id and ip.category == ^category
+      end)
+      |> Repo.all
+  end
+
+  @doc """
   Creates a user.
 
   ## Examples
@@ -117,12 +137,7 @@ defmodule UCast.Accounts do
   def create_influencer(attrs) do
     attrs = Map.put(attrs, :user_type, "influencer")
     user_changeset = User.changeset(%User{}, attrs)
-    IO.puts "++++++++++++++++++++++++++++++++++++++++++++++"
-    IO.inspect user_changeset
-    IO.puts "++++++++++++++++++++++++++++++++++++++++++++++"
-    
     profile_changeset = InfluencerProfile.changeset(%InfluencerProfile{}, attrs)
-    IO.inspect profile_changeset
     with true <- user_changeset.valid?,
          true <- profile_changeset.valid? do
       user_changeset
@@ -133,5 +148,9 @@ defmodule UCast.Accounts do
         {:error, "Can't create a user"}
     end
 
+  end
+  
+  def datasource() do
+    Dataloader.Ecto.new(UCast.Repo)
   end
 end
