@@ -2,8 +2,8 @@ import React from 'react';
 import { createSwitchNavigator, createAppContainer} from 'react-navigation'; 
 import tabNavigator from './MainTabNavigator';
 import {LandingStack} from './AuthNavigator';
-import { AsyncStorage, ActivityIndicator, StatusBar, View } from "react-native";
-
+import { ActivityIndicator, StatusBar, View } from "react-native";
+import * as SecureStore from "expo-secure-store";
 
 class AuthLoadingScreen extends React.Component {
   constructor() {
@@ -13,15 +13,13 @@ class AuthLoadingScreen extends React.Component {
 
   // Fetch the token from storage then navigate to
   // our appropriate place
-  _bootstrapAsync = async () => {
-    const userToken = await AsyncStorage.getItem("auth-token");
+  _bootstrapAsync = () => {
 
     // This will switch to the App screen or Auth screen and this
     // loading screen will be unmounted and thrown away.
-    console.log("Printing userToken");
-    console.log(userToken);
-
-    this.props.navigation.navigate(userToken ? "Main" : "Auth");
+    SecureStore.getItemAsync("userToken").then(token => {
+      this.props.navigation.navigate(token ? "Main" : "Auth");
+    })
   };
 
   // Render any loading content that you like here
@@ -43,3 +41,4 @@ export default createAppContainer(
     Main: tabNavigator,
   })
 );
+

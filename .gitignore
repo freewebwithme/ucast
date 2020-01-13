@@ -37,3 +37,4 @@ u_cast-*.tar
 .env
 .elixir_ls
 /frontend/node_modules/
+*.swp
