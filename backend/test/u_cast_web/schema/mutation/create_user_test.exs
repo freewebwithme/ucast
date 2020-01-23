@@ -17,16 +17,18 @@ defmodule UCastWeb.Schema.Mutation.CreateUserTest do
       password: "secret",
       username: "newUser"
     }
+
     conn = build_conn()
     conn = post(conn, "/api", %{query: @query, variables: input})
+
     assert json_response(conn, 200) == %{
-      "data" => %{
-        "signup" => %{
-          "user" => %{
-            "username" => "newUser"
+             "data" => %{
+               "signup" => %{
+                 "user" => %{
+                   "username" => "newUser"
+                 }
+               }
+             }
            }
-        }
-      }
-    }
   end
 end

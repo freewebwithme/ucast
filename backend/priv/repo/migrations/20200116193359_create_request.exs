@@ -1,4 +1,4 @@
-defmodule UCast.Repo.Migrations.CreateRequests do
+defmodule UCast.Repo.Migrations.CreateRequest do
   use Ecto.Migration
 
   def change do
@@ -14,6 +14,5 @@ defmodule UCast.Repo.Migrations.CreateRequests do
 
       timestamps()
     end
-
   end
 end

@@ -18,7 +18,25 @@ defmodule UCast.Casting.Request do
   @doc false
   def changeset(request, attrs) do
     request
-    |> cast(attrs, [:requester, :requester_phonenumber, :requester_email, :message_from, :message_to, :instructions, :requester_id, :influencer_id])
-    |> validate_required([:requester, :requester_phonenumber, :requester_email, :message_from, :message_to, :instructions, :requester_id, :influencer_id])
+    |> cast(attrs, [
+      :requester,
+      :requester_phonenumber,
+      :requester_email,
+      :message_from,
+      :message_to,
+      :instructions,
+      :requester_id,
+      :influencer_id
+    ])
+    |> validate_required([
+      :requester,
+      :requester_phonenumber,
+      :requester_email,
+      :message_from,
+      :message_to,
+      :instructions,
+      :requester_id,
+      :influencer_id
+    ])
   end
 end

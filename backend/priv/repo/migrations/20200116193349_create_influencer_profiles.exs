@@ -1,4 +1,4 @@
-defmodule UCast.Repo.Migrations.CreateInfluencerProfile do
+defmodule UCast.Repo.Migrations.CreateInfluencerProfiles do
   use Ecto.Migration
 
   def change do
@@ -8,6 +8,8 @@ defmodule UCast.Repo.Migrations.CreateInfluencerProfile do
       add :follower_count, :string
       add :active, :boolean
       add :user_id, references(:users), null: false
+      add :sns_url, :string
+      add :category, :string
 
       timestamps()
     end

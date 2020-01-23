@@ -42,7 +42,7 @@ defmodule UCast.MixProject do
       {:jason, "~> 1.0"},
       {:poison, "~> 3.1"},
       {:plug_cowboy, "~> 2.0"},
-      {:absinthe, "~> 1.4"},                                                                  
+      {:absinthe, "~> 1.4"},
       {:absinthe_plug, "~> 1.4"},
       {:absinthe_phoenix, "~> 1.4"},
       {:comeonin_ecto_password, "~> 3.0.0"},
@@ -50,13 +50,16 @@ defmodule UCast.MixProject do
       {:uuid, "~> 1.1"},
       {:waffle, "~> 0.0.3"},
       {:dataloader, "~> 1.0"},
+      {:email_checker, "~> 0.1.3"},
+      {:httpoison, "~> 1.6"},
+      {:joken, "~> 2.2"},
+      {:joken_jwks, "~> 1.2"},
 
       # AWS
       {:ex_aws, "~> 2.1"},
       {:ex_aws_s3, "~> 2.0"},
       {:hackney, "~> 1.9"},
-      {:sweet_xml, "~> 0.6"},
-
+      {:sweet_xml, "~> 0.6"}
     ]
   end
 

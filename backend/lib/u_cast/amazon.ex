@@ -6,7 +6,7 @@ defmodule UCast.Amazon do
   alias ExAws.S3
   alias UUID
 
-  @doc"""
+  @doc """
   Generate new s3 filename in this format
   username/current_date/randomname.extension
   ex)
@@ -14,18 +14,19 @@ defmodule UCast.Amazon do
   """
 
   def create_s3_filename(filepath, username) do
-    utc_today = Date.utc_today
+    utc_today = Date.utc_today()
     random_filename = UUID.uuid4(:hex) |> String.slice(0, 6)
     extension = Path.extname(filepath)
     s3_filename = "#{username}/#{utc_today}/#{random_filename}#{extension}"
     s3_filename
   end
 
-  @doc"""
+  @doc """
   Upload to amazon S3
   """
   def upload_video_to_s3_async(path, username) do
-    s3_filename =create_s3_filename(path, username)
+    s3_filename = create_s3_filename(path, username)
+
     Task.async(fn ->
       path
       |> S3.Upload.stream_file()

@@ -25,6 +25,12 @@
     ],
     "ios": {
       "supportsTablet": true
-    }
+    },
+    "extra":{
+      "instagramAppId" : "1024690424563676",
+      "facebookAppId" : "1320283904809725",
+      "androidClientId" : "837078523922-aji4urrnv2skoei173bcc6cme607e94l.apps.googleusercontent.com",
+      "iosClientId" : "837078523922-9983eme9k60qscdg4aqibmfcmkoue1fc.apps.googleusercontent.com"
+    } 
   }
 }

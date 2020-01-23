@@ -5,37 +5,15 @@ defmodule UCast.Accounts do
   import Ecto.Query, warn: false
   alias UCast.Repo
 
+  alias UCast.Accounts
   alias UCast.Accounts.{User, InfluencerProfile}
 
-  @doc """
-  Returns the list of users.
-
-  ## Examples
-
-      iex> list_users()
-      [%User{}, ...]
-
-  """
   def list_users do
     Repo.all(User)
   end
 
-  @doc """
-  Gets a single user.
-
-  Raises `Ecto.NoResultsError` if the User does not exist.
-
-  ## Examples
-
-      iex> get_user!(123)
-      %User{}
-
-      iex> get_user!(456)
-      ** (Ecto.NoResultsError)
-
-  """
   def get_user!(id), do: Repo.get!(User, id)
-  
+
   def get_user(id), do: Repo.get(User, id)
 
   @doc """
@@ -50,30 +28,40 @@ defmodule UCast.Accounts do
     Enum.reduce(criteria, query, fn
       {:limit, limit}, query ->
         from u in query, limit: ^limit
+
       {:category, category}, query ->
         from u in query,
           join: ip in InfluencerProfile,
           where: ip.user_id == u.id and ip.category == ^category
-      end)
-      |> Repo.all
+    end)
+    |> Repo.all()
   end
 
-  @doc """
-  Creates a user.
-
-  ## Examples
-
-      iex> create_user(%{field: value})
-      {:ok, %User{}}
-
-      iex> create_user(%{field: bad_value})
-      {:error, %Ecto.Changeset{}}
-
-  """
   def create_user(attrs \\ %{}) do
     %User{}
     |> User.changeset(attrs)
     |> Repo.insert()
+  end
+
+  @doc """
+  Create a user from Oauth(instagram. facebook, google) provider.
+  """
+  def create_user_oauth(attrs \\ %{}) do
+    %User{}
+    |> User.oauth_changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Get or insert(Upsert) a user from oauth login(google)
+  """
+  def get_or_insert!(attrs \\ %{}) do
+    %User{}
+    |> User.oauth_changeset(attrs)
+    |> Repo.insert!(
+      on_conflict: [set: [provider_id: attrs[:provider_id]]],
+      conflict_target: [:provider_id]
+    )
   end
 
   @doc """
@@ -123,11 +111,31 @@ defmodule UCast.Accounts do
     User.changeset(user, %{})
   end
 
-  def authenticate(username, password) do
-    user = Repo.get_by(User, username: username)
+  def authenticate(email, password) do
+    user = Repo.get_by(User, email: email)
 
     with %{password: hashed_password} <- user,
          true <- Comeonin.Ecto.Password.valid?(password, hashed_password) do
+      {:ok, user}
+    else
+      _ -> :error
+    end
+  end
+
+  @doc """
+  Verify idToken from google
+  """
+  def authenticate_google_idToken(idToken, name, avatar_url) do
+    with {:ok, result} <- UCast.GoogleToken.verify_and_validate(idToken) do
+      attrs = %{
+        email: result["email"],
+        name: name,
+        provider_id: result["sub"],
+        avatar_url: avatar_url,
+        provider_name: "google"
+      }
+
+      user = Accounts.get_or_insert!(attrs)
       {:ok, user}
     else
       _ -> :error
@@ -138,6 +146,7 @@ defmodule UCast.Accounts do
     attrs = Map.put(attrs, :user_type, "influencer")
     user_changeset = User.changeset(%User{}, attrs)
     profile_changeset = InfluencerProfile.changeset(%InfluencerProfile{}, attrs)
+
     with true <- user_changeset.valid?,
          true <- profile_changeset.valid? do
       user_changeset
@@ -147,9 +156,8 @@ defmodule UCast.Accounts do
       _ ->
         {:error, "Can't create a user"}
     end
-
   end
-  
+
   def datasource() do
     Dataloader.Ecto.new(UCast.Repo)
   end

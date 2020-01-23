@@ -22,17 +22,21 @@ defmodule UCastWeb.Schema.Mutation.CreateInfluencer do
     followerCount: "595959"
   }
   test "signing up as Influencer" do
-    conn = post(build_conn(), "/api", %{
-      query: @query,
-      variables: @variables
-    })
-    assert %{"data" => %{
-      "requestInfluencer" => session
-    }} = json_response(conn, 200)
+    conn =
+      post(build_conn(), "/api", %{
+        query: @query,
+        variables: @variables
+      })
 
     assert %{
-      "user" => user_data
-    } = session
+             "data" => %{
+               "requestInfluencer" => session
+             }
+           } = json_response(conn, 200)
+
+    assert %{
+             "user" => user_data
+           } = session
 
     assert %{"username" => "taedol", "userType" => "influencer"} == user_data
   end

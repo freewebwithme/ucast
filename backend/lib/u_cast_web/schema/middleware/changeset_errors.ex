@@ -2,27 +2,14 @@ defmodule UCastWeb.Schema.Middleware.ChangesetErrors do
   @behaviour Absinthe.Middleware
 
   def call(res, _) do
-    
-    with %{errors: [%Ecto.Changeset{} = changeset]} <- res do
-      %{res |
-        value: %{errors: transform_errros(changeset)},
-        errors: [],
-      }
-    end
+    %{res | errors: Enum.flat_map(res.errors, &handle_error/1)}
   end
 
-  defp transform_errros(changeset) do
+  defp handle_error(%Ecto.Changeset{} = changeset) do
     changeset
-    |> Ecto.Changeset.traverse_errors(&format_error/1)
-    |> Enum.map(fn
-      {key, value} ->
-        %{key: key, message: value}
-    end)
+    |> Ecto.Changeset.traverse_errors(fn {err, _opts} -> err end)
+    |> Enum.map(fn {k, v} -> "#{k}: #{v}" end)
   end
 
-  defp format_error({msg, opts}) do
-    Enum.reduce(opts, msg, fn {key, value}, acc ->
-      String.replace(acc, "%{#{key}}", to_string(value))
-    end)
-  end
+  defp handle_error(error), do: [error]
 end

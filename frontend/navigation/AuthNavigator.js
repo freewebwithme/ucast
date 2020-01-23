@@ -6,7 +6,6 @@ import {
   SignUpScreen,
   StepTwoScreen,
   StepThreeScreen,
-  StepFourScreen
 } from "../screens/SignUpScreen";
 
 const config = {

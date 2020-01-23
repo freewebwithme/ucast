@@ -1,13 +1,13 @@
 import React from "react";
 import { View, ScrollView, Text, StyleSheet } from "react-native";
-import { SearchBar } from "react-native-elements";
 import { FeaturedInf, Influencers } from "../components/InfluencerFlatList";
 import globalStyles from "../styles/Global";
+import { Searchbar } from "react-native-paper";
 
 export default function HomeScreen() {
   return (
     <View style={globalStyles.container}>
-      <SearchBar placeholder="Type Here" />
+      <Searchbar placeholder="Type Here" />
       <ScrollView style={styles.rootScrollView}>
         <Text style={styles.header}> 모든 유명인 </Text>
         <FeaturedInf />

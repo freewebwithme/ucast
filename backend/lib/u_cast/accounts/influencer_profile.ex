@@ -11,13 +11,14 @@ defmodule UCast.Accounts.InfluencerProfile do
     field :sns_type, :string
     field :sns_url, :string
     field :follower_count, :string
-    field :active, :boolean, default: false 
+    field :active, :boolean, default: false
     field :category, :string
 
     belongs_to :user, User
+
     many_to_many :tags, Tag,
       join_through: "influencer_profile_tags",
-    on_replace: :delete
+      on_replace: :delete
 
     timestamps()
   end
@@ -29,18 +30,19 @@ defmodule UCast.Accounts.InfluencerProfile do
     # It comes as atom, so I need to convert to string type
     %{:sns_type => sns_type} = attrs
     sns_type |> to_string() |> String.downcase()
-    attrs = Map.put(attrs, :sns_type, sns_type) 
+    attrs = Map.put(attrs, :sns_type, sns_type)
+
     user
-    |> cast(attrs, required_fields) 
+    |> cast(attrs, required_fields)
     |> put_assoc(:tags, parse_tags(attrs))
   end
 
   defp parse_tags(attrs) do
-    (Map.get(attrs, :tags)|| "")
+    (Map.get(attrs, :tags) || "")
     |> String.split(",")
     |> Enum.map(&String.trim/1)
-    |> Enum.reject(& &1 == "")
-    |> insert_and_get_all() 
+    |> Enum.reject(&(&1 == ""))
+    |> insert_and_get_all()
   end
 
   defp insert_and_get_all([]), do: []

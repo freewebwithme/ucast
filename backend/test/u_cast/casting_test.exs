@@ -6,9 +6,36 @@ defmodule UCast.CastingTest do
   describe "requests" do
     alias UCast.Casting.Request
 
-    @valid_attrs %{influencer_id: "some influencer_id", instructions: "some instructions", message_from: "some message_from", message_to: "some message_to", requester: "some requester", requester_email: "some requester_email", requester_id: "some requester_id", requester_phonenumber: "some requester_phonenumber"}
-    @update_attrs %{influencer_id: "some updated influencer_id", instructions: "some updated instructions", message_from: "some updated message_from", message_to: "some updated message_to", requester: "some updated requester", requester_email: "some updated requester_email", requester_id: "some updated requester_id", requester_phonenumber: "some updated requester_phonenumber"}
-    @invalid_attrs %{influencer_id: nil, instructions: nil, message_from: nil, message_to: nil, requester: nil, requester_email: nil, requester_id: nil, requester_phonenumber: nil}
+    @valid_attrs %{
+      influencer_id: "some influencer_id",
+      instructions: "some instructions",
+      message_from: "some message_from",
+      message_to: "some message_to",
+      requester: "some requester",
+      requester_email: "some requester_email",
+      requester_id: "some requester_id",
+      requester_phonenumber: "some requester_phonenumber"
+    }
+    @update_attrs %{
+      influencer_id: "some updated influencer_id",
+      instructions: "some updated instructions",
+      message_from: "some updated message_from",
+      message_to: "some updated message_to",
+      requester: "some updated requester",
+      requester_email: "some updated requester_email",
+      requester_id: "some updated requester_id",
+      requester_phonenumber: "some updated requester_phonenumber"
+    }
+    @invalid_attrs %{
+      influencer_id: nil,
+      instructions: nil,
+      message_from: nil,
+      message_to: nil,
+      requester: nil,
+      requester_email: nil,
+      requester_id: nil,
+      requester_phonenumber: nil
+    }
 
     def request_fixture(attrs \\ %{}) do
       {:ok, request} =

@@ -9,8 +9,7 @@ defmodule UCastWeb.Router do
   scope "/" do
     pipe_through :api
 
-    forward "/api", Absinthe.Plug,
-      schema: UCastWeb.Schema.Schema
+    forward "/api", Absinthe.Plug, schema: UCastWeb.Schema.Schema
 
     forward "/graphiql", Absinthe.Plug.GraphiQL,
       schema: UCastWeb.Schema.Schema,
