@@ -23,16 +23,17 @@ defmodule UCast.Accounts do
   {:category, "Youtuber"}
   """
   def get_influencers(criteria \\ %{}) do
-    query = from i in User, where: i.user_type == "influencer"
+    query = from(i in User, where: i.user_type == "influencer")
 
     Enum.reduce(criteria, query, fn
       {:limit, limit}, query ->
-        from u in query, limit: ^limit
+        from(u in query, limit: ^limit)
 
       {:category, category}, query ->
-        from u in query,
+        from(u in query,
           join: ip in InfluencerProfile,
           where: ip.user_id == u.id and ip.category == ^category
+        )
     end)
     |> Repo.all()
   end
@@ -114,7 +115,7 @@ defmodule UCast.Accounts do
   def authenticate(email, password) do
     user = Repo.get_by(User, email: email)
 
-    with %{password: hashed_password} <- user,
+    with %{password: hashed_password} when not is_nil(hashed_password) <- user,
          true <- Comeonin.Ecto.Password.valid?(password, hashed_password) do
       {:ok, user}
     else

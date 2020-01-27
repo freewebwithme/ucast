@@ -5,6 +5,6 @@ const globalStyles = StyleSheet.create({
   container : {
     marginTop: Constants.statusBarHeight,  
   },
-})
+});
 
 export default globalStyles;

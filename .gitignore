@@ -38,3 +38,4 @@ u_cast-*.tar
 .elixir_ls
 /frontend/node_modules/
 *.swp
+.tern-port

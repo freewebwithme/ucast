@@ -10,10 +10,13 @@ import Constants from "expo-constants";
 import * as SecureStore from "expo-secure-store";
 
 const SIGN_IN = gql`
-  mutation($username: String!, $password: String!) {
-    signin(username: $username, password: $password) {
+  mutation($email: String!, $password: String!) {
+    signin(email: $email, password: $password) {
       user {
-        username
+        name
+        providerId
+        providerName
+        email
       }
       token
     }
@@ -43,7 +46,7 @@ function LogInScreen() {
         <View style={formStyles.formView}>
           <Text style={formStyles.formTitle}>UCast로 로그인 하세요</Text>
           <TextInput
-            label="Email address or username"
+            label="이메일을 입력하세요."
             style={formStyles.textInput}
             onChangeText={userEmail => setLoginEmail(userEmail)}
           />
@@ -64,7 +67,7 @@ function LogInScreen() {
               e.preventDefault();
               signIn({
                 variables: {
-                  username: loginEmail,
+                  email: loginEmail,
                   password: loginPass
                 }
               });

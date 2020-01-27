@@ -58,10 +58,12 @@ defmodule UCastWeb.Resolvers.Accounts do
   end
 
   def me(_, _, %{context: %{current_user: user}}) do
+    IO.puts("Found a user")
     {:ok, user}
   end
 
   def me(_, _, _) do
+    IO.puts("empty me....")
     {:ok, nil}
   end
 

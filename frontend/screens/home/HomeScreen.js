@@ -1,10 +1,10 @@
 import React from "react";
 import { View, ScrollView, Text, StyleSheet } from "react-native";
-import { FeaturedInf, Influencers } from "../components/InfluencerFlatList";
-import globalStyles from "../styles/Global";
+import { FeaturedInf, Influencers } from "../../components/InfluencerFlatList";
+import globalStyles from "../../styles/Global";
 import { Searchbar } from "react-native-paper";
 
-export default function HomeScreen() {
+export default function HomeScreen(props) {
   return (
     <View style={globalStyles.container}>
       <Searchbar placeholder="Type Here" />

@@ -18,6 +18,9 @@ defmodule UCastWeb.Plugs.SetCurrentUser do
 
   def call(conn, _) do
     context = build_context(conn)
+    result = get_req_header(conn, "authorization")
+    IO.puts("Printing authorization header")
+    IO.inspect(result)
     Absinthe.Plug.put_options(conn, context: context)
   end
 
@@ -25,9 +28,14 @@ defmodule UCastWeb.Plugs.SetCurrentUser do
     with ["Bearer " <> token] <- get_req_header(conn, "authorization"),
          {:ok, %{id: id}} <- UCastWeb.AuthToken.verify(token),
          %{} = user <- UCast.Accounts.get_user(id) do
+      IO.puts("User has bearer token in context")
+      IO.inspect(token)
+
       %{current_user: user}
     else
-      _ -> %{}
+      _ ->
+        IO.puts("Can't find Bearer")
+        %{}
     end
   end
 end

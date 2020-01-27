@@ -26,19 +26,22 @@ const socketLink = createAbsintheSocketLink(
 // the token in the "Authorization" request header.
 // Returns an object to set the context of the GraphQL request.
 
-const authLink = setContext((_, { headers }) => {
+async function getUserToken() {
+  const userToken = await SecureStore.getItemAsync("userToken");
+  return userToken;
+}
+
+const authLink = setContext(async (_, { headers }) => {
   // TODO: Delete usertoken to work on login process.
-  SecureStore.deleteItemAsync("userToken");
-  SecureStore.getItemAsync("userToken").then(token => {
-    console.log("Printing Usertoken");
-    console.log(token);
-    return {
-      headers: {
-        ...headers,
-        authorization: token ? `Bearer ${token}` : ""
-      }
-    };
-  });
+  //  SecureStore.deleteItemAsync("userToken");
+  const token = await getUserToken();
+  const result = {
+    headers: {
+      ...headers,
+      authorization: token ? `Bearer ${token}` : ""
+    }
+  };
+  return result;
 });
 
 // Create a link that "splits" requests based on GraphQL operation type.
