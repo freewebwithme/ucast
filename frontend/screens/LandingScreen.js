@@ -1,4 +1,4 @@
-import React, { useState }from "react";
+import React, { useState } from "react";
 import { useNavigation } from "react-navigation-hooks";
 import { StyleSheet, View, Text, ImageBackground } from "react-native";
 import { Button } from "react-native-paper";
@@ -7,7 +7,7 @@ import { GoogleLoginButton } from "../oAuth/GoogleLogin";
 import { FacebookLoginButton } from "../oAuth/FacebookLogin";
 import { InstagramLoginButton } from "../oAuth/InstagramLogin";
 import * as SecureStore from "expo-secure-store";
-
+import globalStyles from "../styles/Global.js";
 
 const bgImage = require("../assets/images/pic2.jpg");
 
@@ -15,7 +15,7 @@ function LandingScreen() {
   const { navigate } = useNavigation();
   const [error, setError] = useState("");
   return (
-    <View style={styles.container}>
+    <View style={globalStyles.container}>
       <ImageBackground
         source={bgImage}
         style={{
@@ -25,16 +25,16 @@ function LandingScreen() {
           opacity: 1.0
         }}
       >
-        <View style={{ ...styles.container, flex: 6 }}>
+        <View style={{ ...globalStyles.container, flex: 6 }}>
           <Text style={styles.landingText}>소중한 사람에게</Text>
           <Text style={styles.landingText}>추억을 선물하세요</Text>
         </View>
-        <View style={{ ...styles.colContainer, flex: 2 }}>
+        <View style={{ ...globalStyles.colContainer, flex: 2 }}>
 	  <GoogleLoginButton onError={setError} />
         </View>
         <View
           style={{
-            ...styles.rowContainer,
+            ...globalStyles.rowContainer,
             flex: 1
           }}
         >
@@ -57,17 +57,6 @@ function LandingScreen() {
           >
            회원가입 
           </Button>
-          <Button
-            mode="text"
-            uppercase={false}
-            onPress={() => {
-	     let result = SecureStore.getItemAsync("fbToken");
-	      { result ? console.log(result) : console.log("nothing")};
-
-            }}
-          >
-           Get Data 
-          </Button>
         </View>
 	<View style={{...styles.colContainer, flex: 1 }}>
 	  <Text> {error} </Text>
@@ -78,22 +67,6 @@ function LandingScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    alignItems: "center",
-    flexDirection: "column",
-    justifyContent: "center",
-    marginTop: Constants.statusBarHeight
-  },
-  rowContainer: {
-    alignItems: "center",
-    flexDirection: "row",
-    justifyContent: "center"
-  },
-  colContainer: {
-    alignItems: "center",
-    flexDirection: "column",
-    justifyContent: "center"
-  },
   landingText: {
     fontSize: 40,
     fontWeight: "bold",
