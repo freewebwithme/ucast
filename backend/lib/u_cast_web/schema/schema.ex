@@ -38,6 +38,7 @@ defmodule UCastWeb.Schema.Schema do
     end
   end
 
+
   mutation do
     @desc "Create an user account"
     field :signup, :session do
@@ -94,24 +95,24 @@ defmodule UCastWeb.Schema.Schema do
   end
 
   object :session do
-    field :user, non_null(:user)
-    field :token, non_null(:string)
+    field(:user, non_null(:user))
+    field(:token, non_null(:string))
   end
 
   object :user do
-    field :id, non_null(:id)
-    field :email, non_null(:string)
-    field :name, :string
-    field :avatar_url, :string
-    field :intro, :string
-    field :user_type, non_null(:string)
-    field :provider_name, :string
-    field :provider_id, :string
-    field :influencer_profile, :influencer_profile, resolve: dataloader(Users)
+    field(:id, non_null(:id))
+    field(:email, non_null(:string))
+    field(:name, :string)
+    field(:avatar_url, :string)
+    field(:intro, :string)
+    field(:user_type, non_null(:string))
+    field(:provider_name, :string)
+    field(:provider_id, :string)
+    field(:influencer_profile, :influencer_profile, resolve: dataloader(Users))
   end
 
   object :influencer_profile do
-    field :phone_number, non_null(:string)
+    field(:phone_number, non_null(:string))
 
     field :sns_type, non_null(:sns_type) do
       # In database, sns_type is string, so when fetch it
@@ -122,15 +123,15 @@ defmodule UCastWeb.Schema.Schema do
       end)
     end
 
-    field :sns_url, non_null(:string)
-    field :follower_count, non_null(:string)
-    field :active, non_null(:boolean)
-    field :category, non_null(:string)
-    field :tags, list_of(:tags), resolve: dataloader(Users)
+    field(:sns_url, non_null(:string))
+    field(:follower_count, non_null(:string))
+    field(:active, non_null(:boolean))
+    field(:category, non_null(:string))
+    field(:tags, list_of(:tags), resolve: dataloader(Users))
   end
 
   object :tags do
-    field :name, non_null(:string)
+    field(:name, non_null(:string))
   end
 
   def context(ctx) do

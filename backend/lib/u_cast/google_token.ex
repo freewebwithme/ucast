@@ -11,7 +11,7 @@ defmodule UCast.GoogleToken do
     |> add_claim(
       "aud",
       nil,
-      &(&1 == "837078523922-aji4urrnv2skoei173bcc6cme607e94l.apps.googleusercontent.com")
+      &(&1 == "837078523922-kk5vhkmhl089j7ngqdmoebgssq986c9g.apps.googleusercontent.com")
     )
   end
 end
