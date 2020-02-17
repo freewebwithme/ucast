@@ -56,12 +56,12 @@
         "source": "/home/user/.gradle/caches/transforms-2/files-2.1/f931d72d60ae4323c17af0fabca36502/res/layout/design_layout_tab_icon.xml"
     },
     {
-        "merged": "/home/user/Projects/ucast/frontend/android/app/build/intermediates/res/merged/debug/drawable-mdpi-v4_googleg_disabled_color_18.png.flat",
-        "source": "/home/user/.gradle/caches/transforms-2/files-2.1/9f3fc47446053300527a36bd314f0a32/res/drawable-mdpi-v4/googleg_disabled_color_18.png"
-    },
-    {
         "merged": "/home/user/Projects/ucast/frontend/android/app/build/intermediates/res/merged/debug/interpolator_mtrl_linear.xml.flat",
         "source": "/home/user/.gradle/caches/transforms-2/files-2.1/f931d72d60ae4323c17af0fabca36502/res/interpolator/mtrl_linear.xml"
+    },
+    {
+        "merged": "/home/user/Projects/ucast/frontend/android/app/build/intermediates/res/merged/debug/drawable-mdpi-v4_googleg_disabled_color_18.png.flat",
+        "source": "/home/user/.gradle/caches/transforms-2/files-2.1/9f3fc47446053300527a36bd314f0a32/res/drawable-mdpi-v4/googleg_disabled_color_18.png"
     },
     {
         "merged": "/home/user/Projects/ucast/frontend/android/app/build/intermediates/res/merged/debug/drawable-hdpi-v4_abc_popup_background_mtrl_mult.9.png.flat",
@@ -224,12 +224,12 @@
         "source": "/home/user/.gradle/caches/transforms-2/files-2.1/f931d72d60ae4323c17af0fabca36502/res/layout/design_layout_tab_text.xml"
     },
     {
-        "merged": "/home/user/Projects/ucast/frontend/android/app/build/intermediates/res/merged/debug/drawable-xxhdpi-v4_common_google_signin_btn_text_light_normal_background.9.png.flat",
-        "source": "/home/user/.gradle/caches/transforms-2/files-2.1/9f3fc47446053300527a36bd314f0a32/res/drawable-xxhdpi-v4/common_google_signin_btn_text_light_normal_background.9.png"
-    },
-    {
         "merged": "/home/user/Projects/ucast/frontend/android/app/build/intermediates/res/merged/debug/drawable_btn_checkbox_unchecked_to_checked_mtrl_animation.xml.flat",
         "source": "/home/user/.gradle/caches/transforms-2/files-2.1/838d04767c6ee1bccad4e921ab8f4bba/res/drawable/btn_checkbox_unchecked_to_checked_mtrl_animation.xml"
+    },
+    {
+        "merged": "/home/user/Projects/ucast/frontend/android/app/build/intermediates/res/merged/debug/drawable-xxhdpi-v4_common_google_signin_btn_text_light_normal_background.9.png.flat",
+        "source": "/home/user/.gradle/caches/transforms-2/files-2.1/9f3fc47446053300527a36bd314f0a32/res/drawable-xxhdpi-v4/common_google_signin_btn_text_light_normal_background.9.png"
     },
     {
         "merged": "/home/user/Projects/ucast/frontend/android/app/build/intermediates/res/merged/debug/drawable-mdpi-v4_abc_menu_hardkey_panel_mtrl_mult.9.png.flat",
@@ -320,12 +320,12 @@
         "source": "/home/user/.gradle/caches/transforms-2/files-2.1/f931d72d60ae4323c17af0fabca36502/res/drawable-xxhdpi-v4/design_ic_visibility_off.png"
     },
     {
-        "merged": "/home/user/Projects/ucast/frontend/android/app/build/intermediates/res/merged/debug/drawable_notification_icon_background.xml.flat",
-        "source": "/home/user/.gradle/caches/transforms-2/files-2.1/5bdffcb420bf09b57c4ebf382a65c2b6/res/drawable/notification_icon_background.xml"
-    },
-    {
         "merged": "/home/user/Projects/ucast/frontend/android/app/build/intermediates/res/merged/debug/drawable-xhdpi-v4_design_ic_visibility_off.png.flat",
         "source": "/home/user/.gradle/caches/transforms-2/files-2.1/f931d72d60ae4323c17af0fabca36502/res/drawable-xhdpi-v4/design_ic_visibility_off.png"
+    },
+    {
+        "merged": "/home/user/Projects/ucast/frontend/android/app/build/intermediates/res/merged/debug/drawable_notification_icon_background.xml.flat",
+        "source": "/home/user/.gradle/caches/transforms-2/files-2.1/5bdffcb420bf09b57c4ebf382a65c2b6/res/drawable/notification_icon_background.xml"
     },
     {
         "merged": "/home/user/Projects/ucast/frontend/android/app/build/intermediates/res/merged/debug/anim_btn_radio_to_off_mtrl_ring_outer_path_animation.xml.flat",
@@ -364,12 +364,12 @@
         "source": "/home/user/.gradle/caches/transforms-2/files-2.1/838d04767c6ee1bccad4e921ab8f4bba/res/drawable/abc_item_background_holo_dark.xml"
     },
     {
-        "merged": "/home/user/Projects/ucast/frontend/android/app/build/intermediates/res/merged/debug/layout_design_navigation_item.xml.flat",
-        "source": "/home/user/.gradle/caches/transforms-2/files-2.1/f931d72d60ae4323c17af0fabca36502/res/layout/design_navigation_item.xml"
-    },
-    {
         "merged": "/home/user/Projects/ucast/frontend/android/app/build/intermediates/res/merged/debug/drawable_tooltip_frame_dark.xml.flat",
         "source": "/home/user/.gradle/caches/transforms-2/files-2.1/838d04767c6ee1bccad4e921ab8f4bba/res/drawable/tooltip_frame_dark.xml"
+    },
+    {
+        "merged": "/home/user/Projects/ucast/frontend/android/app/build/intermediates/res/merged/debug/layout_design_navigation_item.xml.flat",
+        "source": "/home/user/.gradle/caches/transforms-2/files-2.1/f931d72d60ae4323c17af0fabca36502/res/layout/design_navigation_item.xml"
     },
     {
         "merged": "/home/user/Projects/ucast/frontend/android/app/build/intermediates/res/merged/debug/anim_btn_checkbox_to_unchecked_icon_null_animation.xml.flat",
@@ -436,12 +436,12 @@
         "source": "/home/user/.gradle/caches/transforms-2/files-2.1/838d04767c6ee1bccad4e921ab8f4bba/res/layout/abc_activity_chooser_view_list_item.xml"
     },
     {
-        "merged": "/home/user/Projects/ucast/frontend/android/app/build/intermediates/res/merged/debug/drawable_ic_mtrl_chip_checked_black.xml.flat",
-        "source": "/home/user/.gradle/caches/transforms-2/files-2.1/f931d72d60ae4323c17af0fabca36502/res/drawable/ic_mtrl_chip_checked_black.xml"
-    },
-    {
         "merged": "/home/user/Projects/ucast/frontend/android/app/build/intermediates/res/merged/debug/anim_abc_slide_out_top.xml.flat",
         "source": "/home/user/.gradle/caches/transforms-2/files-2.1/838d04767c6ee1bccad4e921ab8f4bba/res/anim/abc_slide_out_top.xml"
+    },
+    {
+        "merged": "/home/user/Projects/ucast/frontend/android/app/build/intermediates/res/merged/debug/drawable_ic_mtrl_chip_checked_black.xml.flat",
+        "source": "/home/user/.gradle/caches/transforms-2/files-2.1/f931d72d60ae4323c17af0fabca36502/res/drawable/ic_mtrl_chip_checked_black.xml"
     },
     {
         "merged": "/home/user/Projects/ucast/frontend/android/app/build/intermediates/res/merged/debug/drawable-xhdpi-v4_abc_switch_track_mtrl_alpha.9.png.flat",

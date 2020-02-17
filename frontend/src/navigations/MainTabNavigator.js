@@ -1,79 +1,42 @@
 import React from 'react';
-import {Platform, StyleSheet} from 'react-native';
-import {createStackNavigator} from 'react-navigation-stack';
-import HomeScreen from '../screens/home/HomeScreen';
-import ProfileScreen from '../screens/profile/ProfileScreen';
-import {createMaterialBottomTabNavigator} from 'react-navigation-material-bottom-tabs';
+import {SafeAreaView} from 'react-native';
+import {HomeStack} from '../screens/home/HomeStackNavigator';
+import {ProfileStack} from '../screens/profile/ProfileStackNavigator';
+import {NotificationScreen} from '../screens/NotificationScreen';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/Ionicons';
+import {SearchIcon, PersonIcon, BellIcon} from '../styles/Icons';
+import {BottomNavigation, BottomNavigationTab} from '@ui-kitten/components';
 
-const config = Platform.select({
-  web: {headerMode: 'screen'},
-  android: {headerMode: 'none'},
-  ios: {headerMode: 'none'},
-  default: {},
-});
+const Tab = createBottomTabNavigator();
 
-const HomeStack = createStackNavigator(
-  {
-    Home: HomeScreen,
-  },
-  config,
-);
+const BottomTabBar = ({navigation, state}) => {
+  const onSelect = index => {
+    navigation.navigate(state.routeNames[index]);
+  };
 
-HomeStack.navigationOptions = {
-  tabBarLabel: 'Home',
-  tabBarIcon: ({focused, tintColor}) => (
-    <Icon
-      color={tintColor}
-      name={
-        Platform.OS === 'ios'
-          ? focused
-            ? 'ios-home'
-            : 'ios-home-outline'
-          : 'md-home'
-      }
-      size={25}
-    />
-  ),
+  return (
+    <SafeAreaView>
+      <BottomNavigation
+        selectedIndex={state.index}
+        onSelect={onSelect}
+        appearance="noIndicator">
+        <BottomNavigationTab title="Home" icon={SearchIcon} />
+        <BottomNavigationTab title="Notification" icon={BellIcon} />
+        <BottomNavigationTab title="Profile" icon={PersonIcon} />
+      </BottomNavigation>
+    </SafeAreaView>
+  );
 };
 
-HomeStack.path = '';
-
-const ProfileStack = createStackNavigator(
-  {
-    Profile: ProfileScreen,
-  },
-  config,
-);
-
-ProfileStack.navigationOptions = {
-  tabBarLabel: 'Profile',
-  tabBarIcon: ({tintColor}) => (
-    <Icon color={tintColor} name="md-person" size={25} />
-  ),
-  tabBarOnPress: arg => {
-    arg.defaultHandler();
-  },
-};
-
-ProfileStack.path = '';
-
-const tabNavigator = createMaterialBottomTabNavigator(
-  {
-    Home: {screen: HomeStack},
-    Profile: {screen: ProfileStack},
-  },
-  {
-    initialRouteName: 'Home',
-  },
-);
-
-export default tabNavigator;
-const styles = StyleSheet.create({
-  bottom: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    bottom: 0,
-  },
-});
+export function MainTabNavigator() {
+  return (
+    <Tab.Navigator
+      initialRouteName="Home"
+      tabBar={props => <BottomTabBar {...props} />}>
+      <Tab.Screen name="Home" component={HomeStack} />
+      <Tab.Screen name="Notification" component={NotificationScreen} />
+      <Tab.Screen name="Profile" component={ProfileStack} />
+    </Tab.Navigator>
+  );
+}

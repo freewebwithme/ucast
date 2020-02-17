@@ -37,7 +37,7 @@ defmodule UCast.Seeds do
         sns_type: Enum.random(@sns_names),
         sns_url: "www.instagram.com/user#{x}",
         phone_number: "213-444-6666",
-        category: Enum.random(@category),
+        category: %{name: Enum.random(@category)},
         tags: Enum.random(@tags)
       }
 

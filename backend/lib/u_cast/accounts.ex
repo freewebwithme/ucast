@@ -6,7 +6,7 @@ defmodule UCast.Accounts do
   alias UCast.Repo
 
   alias UCast.Accounts
-  alias UCast.Accounts.{User, InfluencerProfile}
+  alias UCast.Accounts.{User, InfluencerProfile, Category}
 
   def list_users do
     Repo.all(User)
@@ -155,8 +155,14 @@ defmodule UCast.Accounts do
       |> Repo.insert()
     else
       _ ->
-        {:error, "Can't create a user"}
+        {:error, "가입할수 없습니다. 다시 시도하세요."}
     end
+  end
+
+  def create_category(attrs \\ %{}) do
+    %Category{}
+    |> Category.changeset(attrs)
+    |> Repo.insert()
   end
 
   def datasource() do

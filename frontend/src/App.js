@@ -8,6 +8,9 @@ import CustomTheme from './styles/Theme';
 import Config from 'react-native-config';
 import {AppNavigator} from './navigations/AppNavigator';
 import {GoogleSignin} from '@react-native-community/google-signin';
+import {ApplicationProvider, IconRegistry} from '@ui-kitten/components';
+import {mapping, light as lightTheme} from '@eva-design/eva';
+import {EvaIconsPack} from '@ui-kitten/eva-icons';
 
 enableScreens();
 
@@ -17,9 +20,12 @@ console.log('Printing webClientId: ', Config.googleWebClientId);
 export default function App() {
   return (
     <ApolloProvider client={client}>
-      <PaperProvider theme={CustomTheme}>
-        <AppNavigator />
-      </PaperProvider>
+      <React.Fragment>
+        <IconRegistry icons={EvaIconsPack} />
+        <ApplicationProvider mapping={mapping} theme={lightTheme}>
+          <AppNavigator />
+        </ApplicationProvider>
+      </React.Fragment>
     </ApolloProvider>
   );
 }

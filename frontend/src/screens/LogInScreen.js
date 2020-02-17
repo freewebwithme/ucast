@@ -1,12 +1,15 @@
 import React, {useState} from 'react';
-import {View, Text, KeyboardAvoidingView, StyleSheet} from 'react-native';
-import {TextInput, Button, HelperText} from 'react-native-paper';
+import {View, KeyboardAvoidingView, StyleSheet} from 'react-native';
+import {TextInput, HelperText} from 'react-native-paper';
 import {useMutation} from '@apollo/react-hooks';
 import gql from 'graphql-tag';
 import formStyles from '../styles/FormStyles';
-import {getStatusBarHeight} from 'react-native-status-bar-height';
 import {storage} from '../utils/Storage';
 import {UserTokenContext} from '../navigations/AppNavigator';
+import {Layout, Text, Button, Input} from '@ui-kitten/components';
+import {validateEmailFormat, validateEmailLength} from '../utils/Validators';
+
+import {LoadingIcon, LogInIcon, RightArrowIcon} from '../styles/Icons';
 
 const SIGN_IN = gql`
   mutation($email: String!, $password: String!) {
@@ -53,28 +56,29 @@ export function LogInScreen({navigation}) {
     console.log('printing usemutation loading');
   }
 
+  const validEmail =
+    validateEmailFormat(loginEmail) && validateEmailLength(loginEmail);
+
   return (
-    <KeyboardAvoidingView
-      style={styles.loginContainer}
-      behavior="padding"
-      enabled>
-      <View style={styles.loginContainer}>
-        <View style={formStyles.formView}>
-          <Text style={formStyles.formTitle}>UCast로 로그인 하세요</Text>
-          <TextInput
+    <Layout style={styles.loginContainer}>
+      <KeyboardAvoidingView enabled>
+        <Layout style={formStyles.formView}>
+          <Text style={{marginBottom: 20}} category="h3">
+            UCast로 로그인 하세요
+          </Text>
+          <Input
             label="이메일을 입력하세요."
             style={formStyles.textInput}
+            status={validEmail ? 'success' : 'danger'}
+            caption={!validEmail ? '올바른 이메일 형식이 아닙니다.' : ''}
+            placeholder="john@example.com"
             onChangeText={userEmail => setLoginEmail(userEmail)}
           />
-          <HelperText
-            type="error"
-            visible={loginEmail.lLandingength < 5 || loginEmail.length > 30}>
-            이메일이나 아이디는 5자이상 30자 미만이어야 합니다.
-          </HelperText>
-          <TextInput
+          <Input
             label="Password"
-            style={formStyles.textInput}
+            style={{...formStyles.textInput, marginTop: 10}}
             secureTextEntry={true}
+            placeholder="*************"
             onChangeText={password => setLoginPass(password)}
           />
           <Button
@@ -88,15 +92,22 @@ export function LogInScreen({navigation}) {
               });
             }}
             style={{marginTop: 15}}
-            mode="contained"
-            loading={loading}
+            appearance="outline"
+            icon={loading ? LoadingIcon : LogInIcon}
             disabled={!loginEmail || !loginPass}>
-            Log In
+            로그인
           </Button>
-          {error && <Text style={formStyles.errorText}>{error.message}</Text>}
-        </View>
-      </View>
-    </KeyboardAvoidingView>
+          {error && (
+            <Text
+              style={{marginTop: 10, color: 'red'}}
+              status="danger"
+              category="c2">
+              {error.message}
+            </Text>
+          )}
+        </Layout>
+      </KeyboardAvoidingView>
+    </Layout>
   );
 }
 
@@ -105,6 +116,5 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     justifyContent: 'center',
-    marginTop: getStatusBarHeight(),
   },
 });

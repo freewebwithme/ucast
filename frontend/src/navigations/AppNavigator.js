@@ -2,9 +2,9 @@ import React from 'react';
 import {storage} from '../utils/Storage';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
-import {HomeScreen} from '../screens/home/HomeScreen';
 import {SplashScreen} from '../screens/SplashScreen';
 import {LandingStack} from './LandingStackNavigator';
+import {MainTabNavigator} from './MainTabNavigator';
 
 const Stack = createStackNavigator();
 export const UserTokenContext = React.createContext();
@@ -36,7 +36,7 @@ export function AppNavigator() {
           ) : userToken === null ? (
             <Stack.Screen name="Landing" component={LandingStack} />
           ) : (
-            <Stack.Screen name="Home" component={HomeScreen} />
+            <Stack.Screen name="Home" component={MainTabNavigator} />
           )}
         </Stack.Navigator>
       </UserTokenContext.Provider>

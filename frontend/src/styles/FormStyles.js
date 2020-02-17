@@ -6,7 +6,7 @@ const formStyles = StyleSheet.create({
     padding: 15,
   },
   textInput: {
-    backgroundColor: white,
+    marginBottom: 15,
   },
   formTitle: {
     fontSize: 24,

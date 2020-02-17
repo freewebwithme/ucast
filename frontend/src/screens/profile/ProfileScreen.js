@@ -1,9 +1,18 @@
-import React, {useEffect} from 'react';
-import {View, ScrollView, Text, StyleSheet} from 'react-native';
+import React from 'react';
+import {ScrollView, StyleSheet} from 'react-native';
 import globalStyles from '../../styles/Global';
 import gql from 'graphql-tag';
 import {useQuery} from '@apollo/react-hooks';
-import {Avatar, Button} from 'react-native-paper';
+import {Layout, Avatar, Button, Text, Card} from '@ui-kitten/components';
+import {
+  EditIcon,
+  HeartIcon,
+  CardIcon,
+  TvIcon,
+  BellIcon,
+  LockIcon,
+  FileTextIcon,
+} from '../../styles/Icons';
 
 const GET_USER_INFO = gql`
   query {
@@ -16,30 +25,77 @@ const GET_USER_INFO = gql`
   }
 `;
 
-export default function ProfileScreen(props) {
+export function ProfileScreen(props) {
   const {loading, error, data} = useQuery(GET_USER_INFO);
+  const userInfo = data;
 
   if (error) return <Text>{error.message}</Text>;
   if (loading) return <Text>Loading...</Text>;
   return (
-    <View style={globalStyles.container}>
-      <View style={globalStyles.colContainer}>
-        <Text style={styles.name}>{data && data.me.name}</Text>
-        <Avatar.Image
-          size={72}
-          source={{uri: data.me.avatarUrl}}
-          style={styles.avatar}
-        />
-        <View style={globalStyles.rowContainer}>
-          <Button style={styles.margin5Button} mode="contained">
-            수정하기
-          </Button>
-          <Button style={styles.margin5Button} mode="contained">
-            위시리스트
-          </Button>
-        </View>
-      </View>
-    </View>
+    <Layout style={{...globalStyles.colContainer, flex: 1}}>
+      <Layout
+        style={{
+          flex: 2,
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}>
+        <Avatar size="giant" source={{uri: userInfo.me.avatarUrl}} />
+        <Text style={styles.name}>{data && userInfo.me.name}</Text>
+        {userInfo.me.intro && (
+          <Card style={{margin: 20}}>
+            <Text>{userInfo.me.intro}</Text>
+          </Card>
+        )}
+      </Layout>
+      <Layout style={{...globalStyles.rowContainer, flex: 0.5}}>
+        <Button style={styles.margin5Button} appearance="ghost" icon={EditIcon}>
+          수정하기
+        </Button>
+        <Button
+          style={styles.margin5Button}
+          appearance="ghost"
+          icon={HeartIcon}>
+          위시리스트
+        </Button>
+      </Layout>
+      <Layout style={{justifyContent: 'center', flex: 2}}>
+        <Button
+          style={styles.fullWidthButton}
+          appearance="outline"
+          icon={CardIcon}
+          status="info">
+          결제방법 보기
+        </Button>
+        <Button
+          style={styles.fullWidthButton}
+          appearance="outline"
+          icon={TvIcon}
+          status="info">
+          까메오 기록 보기
+        </Button>
+        <Button
+          style={styles.fullWidthButton}
+          appearance="outline"
+          icon={BellIcon}
+          status="info">
+          알람설정보기
+        </Button>
+        <Button
+          style={styles.fullWidthButton}
+          appearance="outline"
+          icon={LockIcon}
+          status="info">
+          Security & Privacy
+        </Button>
+        <Button
+          style={styles.fullWidthButton}
+          appearance="outline"
+          icon={FileTextIcon}
+          status="info">
+          Terms & Service
+        </Button>
+      </Layout>
+    </Layout>
   );
 }
 
@@ -55,5 +111,9 @@ const styles = StyleSheet.create({
   },
   margin5Button: {
     margin: 5,
+  },
+  fullWidthButton: {
+    width: 300,
+    marginBottom: 10,
   },
 });

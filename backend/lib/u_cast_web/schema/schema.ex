@@ -38,7 +38,6 @@ defmodule UCastWeb.Schema.Schema do
     end
   end
 
-
   mutation do
     @desc "Create an user account"
     field :signup, :session do
@@ -126,11 +125,15 @@ defmodule UCastWeb.Schema.Schema do
     field(:sns_url, non_null(:string))
     field(:follower_count, non_null(:string))
     field(:active, non_null(:boolean))
-    field(:category, non_null(:string))
+    field(:category, :category, resolve: dataloader(Users, :category, []))
     field(:tags, list_of(:tags), resolve: dataloader(Users))
   end
 
   object :tags do
+    field(:name, non_null(:string))
+  end
+
+  object :category do
     field(:name, non_null(:string))
   end
 
