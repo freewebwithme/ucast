@@ -55,7 +55,7 @@ defmodule UCast.MixProject do
       {:joken, "~> 2.2"},
       {:joken_jwks, "~> 1.2"},
       {:credo, "~> 1.1.0", only: [:dev, :test], runtime: false},
-      
+      {:money, "~> 1.6"},
       # AWS
       {:ex_aws, "~> 2.1"},
       {:ex_aws_s3, "~> 2.0"},

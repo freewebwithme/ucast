@@ -3,7 +3,7 @@ import {StyleSheet, View, ImageBackground, Image} from 'react-native';
 import {Button, Layout, Text, Card} from '@ui-kitten/components';
 
 function CardHeader(props) {
-  const {image, name, price, category} = props;
+  const {image, price} = props;
   return (
     <React.Fragment>
       <ImageBackground style={styles.headerImage} source={{uri: image}}>
@@ -22,17 +22,15 @@ export const InfluencerCard = props => {
       style={styles.card}
       header={() => (
         <CardHeader
-          image={influencer.avatarUrl}
-          name={influencer.name}
+          image={influencer.user.avatarUrl}
           price={influencer.price}
-          category={influencer.category}
         />
       )}>
       <Text style={{...styles.headerText, fontWeight: 'bold'}} category="s1">
-        {influencer.name}
+        {influencer.user.name}
       </Text>
       <Text style={styles.headerText} category="s1">
-        {influencer.category}
+        {influencer.tags[0].name}
       </Text>
     </Card>
   );
@@ -49,7 +47,7 @@ const styles = StyleSheet.create({
   },
   headerText: {
     textAlign: 'center',
-    marginVertical: 4,
+    marginVertical: 2,
   },
   priceButton: {
     position: 'absolute',

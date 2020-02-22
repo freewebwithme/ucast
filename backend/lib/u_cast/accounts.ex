@@ -20,7 +20,7 @@ defmodule UCast.Accounts do
   Get influencers from all user
   criteria - map of arguments. default is %{}
   {:limit, 5}
-  {:category, "Youtuber"}
+  {:category_id, 3} 
   """
   def get_influencers(criteria \\ %{}) do
     query = from(i in User, where: i.user_type == "influencer")
@@ -29,10 +29,12 @@ defmodule UCast.Accounts do
       {:limit, limit}, query ->
         from(u in query, limit: ^limit)
 
-      {:category, category}, query ->
+      {:category_id, category_id}, query ->
         from(u in query,
-          join: ip in InfluencerProfile,
-          where: ip.user_id == u.id and ip.category == ^category
+          join: ip in assoc(u, :influencer_profile),
+          join: c in assoc(ip, :category),
+          where: ip.user_id == u.id and ip.category_id == ^category_id,
+          preload: [influencer_profile: {ip, :category}]
         )
     end)
     |> Repo.all()
@@ -150,6 +152,8 @@ defmodule UCast.Accounts do
 
     with true <- user_changeset.valid?,
          true <- profile_changeset.valid? do
+      IO.puts("changesets are valid")
+
       user_changeset
       |> Ecto.Changeset.put_assoc(:influencer_profile, profile_changeset)
       |> Repo.insert()
@@ -165,7 +169,87 @@ defmodule UCast.Accounts do
     |> Repo.insert()
   end
 
+  def get_categories(_arg) do
+    IO.puts("Calling Repo.all categories")
+    Repo.all(from(c in Category))
+  end
+
+  def get_category(id) do
+    Repo.get_by(Category, id: id)
+  end
+
+  @doc """
+  This function for displaying homescreen
+  it returns all categories and 10 influencer profiles
+  """
+  def get_categories_for_homescreen(limit) do
+    raw_query =
+      "SELECT * FROM categories c LEFT JOIN LATERAL (SELECT i.* FROM influencer_profiles i WHERE c.id = i.category_id ORDER BY i.updated_at LIMIT #{
+        limit
+      }) i ON 1=1 INNER JOIN users u ON i.user_id = u.id"
+
+    {:ok, result} = Repo.query(raw_query)
+
+    result
+    |> load_categories_for_homescreen()
+  end
+
+  def load_categories_for_homescreen(query_result) do
+    # Build categories
+    category_cols = Enum.slice(query_result.columns, 0, 4)
+    category_rows = Enum.map(query_result.rows, &Enum.slice(&1, 0, 4))
+    categories = Enum.map(category_rows, &Repo.load(Category, {category_cols, &1})) |> Enum.uniq()
+
+    # Build InfluencerProfile
+    influencer_profile_cols = Enum.slice(query_result.columns, 4, 11)
+    influencer_profile_rows = Enum.map(query_result.rows, &Enum.slice(&1, 4, 11))
+
+    influencer_profiles =
+      Enum.map(
+        influencer_profile_rows,
+        &Repo.load(InfluencerProfile, {influencer_profile_cols, &1})
+      )
+
+    # Build Users
+    user_cols = Enum.slice(query_result.columns, 15, 11)
+    user_rows = Enum.map(query_result.rows, &Enum.slice(&1, 15, 11))
+    users = Enum.map(user_rows, &Repo.load(User, {user_cols, &1}))
+    # put users into influencer profiles
+    profiles_ready =
+      Enum.zip(influencer_profiles, users)
+      |> Enum.map(fn {profile, user} -> Map.put(profile, :user, user) end)
+
+    # {categories, profiles_ready, users}
+
+    #  put profiles_ready into categories
+    grouped_profiles = profiles_ready |> Enum.group_by(& &1.category_id)
+
+    categories_ready =
+      categories |> Enum.map(&%{&1 | influencer_profiles: Map.get(grouped_profiles, &1.id)})
+
+    categories_ready
+  end
+
   def datasource() do
-    Dataloader.Ecto.new(UCast.Repo)
+    Dataloader.Ecto.new(UCast.Repo, query: &query/2)
+  end
+
+  def query(InfluencerProfile, %{scope: :category, limit: limit}) do
+    IO.puts("Calling query.InfluencerProfile")
+
+    query =
+      InfluencerProfile
+      |> where(active: true)
+      |> order_by(asc: :updated_at)
+      |> limit(^limit)
+
+    IO.puts("Printing query")
+    IO.inspect(query)
+    query
+  end
+
+  def query(queryable, _) do
+    IO.puts("Calling regular query")
+    queryable
   end
 end

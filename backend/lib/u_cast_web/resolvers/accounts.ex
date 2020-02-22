@@ -31,6 +31,15 @@ defmodule UCastWeb.Resolvers.Accounts do
     {:ok, Accounts.get_influencers(args)}
   end
 
+  def get_categories(_, args, _) do
+    {:ok, Accounts.get_categories(args)}
+  end
+
+  def get_category(_, %{id: id}, _) do
+    category = Accounts.get_category(id)
+    {:ok, category}
+  end
+
   def sign_in(_, %{email: email, password: password}, _) do
     case Accounts.authenticate(email, password) do
       {:ok, user} ->
@@ -81,5 +90,10 @@ defmodule UCastWeb.Resolvers.Accounts do
   def get_profile(user, _, _) do
     query = Ecto.assoc(user, :influencer_profile)
     {:ok, Repo.one(query)}
+  end
+
+  def get_categories_for_homescreen(_, %{limit: limit}, _) do
+    categories = Accounts.get_categories_for_homescreen(limit)
+    {:ok, categories}
   end
 end

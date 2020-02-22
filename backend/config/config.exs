@@ -35,6 +35,9 @@ config :ex_aws, :hackney_opts,
   follow_redirect: true,
   recv_timeout: 30_000
 
+config :money,
+  default_currency: :KRW
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{Mix.env()}.exs"

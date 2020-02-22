@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, ImageBackground} from 'react-native';
+import {StyleSheet, ScrollView, ImageBackground} from 'react-native';
 import {Layout, Text} from '@ui-kitten/components';
 import {InfluencerCard, ImageOverlay} from '../components/Card';
 const sampleImage = require('../assets/images/sample.jpg');
@@ -15,8 +15,20 @@ export function NotificationScreen() {
 
   return (
     <Layout style={styles.container}>
-      <Text category="h2">Hello World!</Text>
-      <InfluencerCard influencer={influencer} />
+      <ScrollView>
+        <ScrollView horizontal={true}>
+          <InfluencerCard influencer={influencer} />
+          <InfluencerCard influencer={influencer} />
+          <InfluencerCard influencer={influencer} />
+          <InfluencerCard influencer={influencer} />
+        </ScrollView>
+        <ScrollView horizontal={true}>
+          <InfluencerCard influencer={influencer} />
+          <InfluencerCard influencer={influencer} />
+          <InfluencerCard influencer={influencer} />
+          <InfluencerCard influencer={influencer} />
+        </ScrollView>
+      </ScrollView>
     </Layout>
   );
 }

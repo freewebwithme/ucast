@@ -30,11 +30,21 @@ defmodule UCastWeb.Schema.Schema do
       resolve(&Resolvers.Accounts.me/3)
     end
 
-    @desc "Get only influencer"
-    field :influencer, list_of(:user) do
-      arg(:limit, :integer)
-      arg(:category, :string)
-      resolve(&Resolvers.Accounts.get_influencers/3)
+    @desc "Get all categories"
+    field :categories, list_of(:category) do
+      resolve(&Resolvers.Accounts.get_categories/3)
+    end
+
+    @desc "Get all categories for homescreen"
+    field :categories_for_home, list_of(:category_homescreen) do
+      arg(:limit, non_null(:integer), default_value: 3)
+      resolve(&Resolvers.Accounts.get_categories_for_homescreen/3)
+    end
+
+    @desc "Get a category"
+    field :category, :category do
+      arg(:id, non_null(:integer))
+      resolve(&Resolvers.Accounts.get_category/3)
     end
   end
 
@@ -111,6 +121,15 @@ defmodule UCastWeb.Schema.Schema do
   end
 
   object :influencer_profile do
+    field(:id, non_null(:integer))
+
+    field :price, non_null(:integer) do
+      resolve(fn parent, _, _ ->
+        money = Map.get(parent, :price) |> Money.to_string()
+        {:ok, money}
+      end)
+    end
+
     field(:phone_number, non_null(:string))
 
     field :sns_type, non_null(:sns_type) do
@@ -127,14 +146,71 @@ defmodule UCastWeb.Schema.Schema do
     field(:active, non_null(:boolean))
     field(:category, :category, resolve: dataloader(Users, :category, []))
     field(:tags, list_of(:tags), resolve: dataloader(Users))
+    field(:user, :user, resolve: dataloader(Users))
   end
 
   object :tags do
+    field(:id, non_null(:integer))
     field(:name, non_null(:string))
   end
 
   object :category do
+    field(:id, non_null(:integer))
     field(:name, non_null(:string))
+
+    field :influencer_profiles, list_of(:influencer_profile) do
+      arg(:limit, type: :integer, default_value: 100)
+      resolve(dataloader(Users, :influencer_profiles, args: %{scope: :category}))
+    end
+  end
+
+  @doc """
+  Special object type for only home screen
+  """
+
+  object :category_homescreen do
+    field(:id, non_null(:integer))
+    field(:name, non_null(:string))
+
+    field :influencer_profiles, list_of(:influencer_profile_homescreen) do
+      resolve(fn parent, _, _ ->
+        {:ok, parent.influencer_profiles}
+      end)
+    end
+  end
+
+  object :influencer_profile_homescreen do
+    field(:id, non_null(:integer))
+
+    field :price, non_null(:integer) do
+      resolve(fn parent, _, _ ->
+        money = Map.get(parent, :price) |> Money.to_string()
+        {:ok, money}
+      end)
+    end
+
+    field(:phone_number, non_null(:string))
+
+    field :sns_type, non_null(:sns_type) do
+      # In database, sns_type is string, so when fetch it
+      # we need to convert back to atom
+      resolve(fn parent, _, _ ->
+        sns_type = Map.get(parent, :sns_type) |> String.to_atom()
+        {:ok, sns_type}
+      end)
+    end
+
+    field(:sns_url, non_null(:string))
+    field(:follower_count, non_null(:string))
+    field(:active, non_null(:boolean))
+    field(:category, :category, resolve: dataloader(Users, :category, []))
+    field(:tags, list_of(:tags), resolve: dataloader(Users))
+
+    field :user, :user do
+      resolve(fn parent, _, _ ->
+        {:ok, parent.user}
+      end)
+    end
   end
 
   def context(ctx) do

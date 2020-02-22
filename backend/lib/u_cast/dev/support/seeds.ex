@@ -22,10 +22,10 @@ defmodule UCast.Seeds do
     "https://ucastprofilepic.s3-us-west-2.amazonaws.com/woman-wearing-black-eyeglasses-1239291.jpg"
   ]
   @sns_names ["intagram", "youtube", "facebook", "twitter"]
-
+  @prices [35000, 55000, 60000, 100_000, 200_000, 10000, 20000, 1_000_000]
   # Create influencers
   def run() do
-    for x <- 0..20 do
+    for x <- 0..100 do
       attrs = %{
         name: "김구라#{x}",
         email: "user#{x}@example.com",
@@ -38,7 +38,9 @@ defmodule UCast.Seeds do
         sns_url: "www.instagram.com/user#{x}",
         phone_number: "213-444-6666",
         category: %{name: Enum.random(@category)},
-        tags: Enum.random(@tags)
+        tags: Enum.random(@tags),
+        active: true,
+        price: Enum.random(@prices)
       }
 
       UCast.Accounts.create_influencer(attrs)

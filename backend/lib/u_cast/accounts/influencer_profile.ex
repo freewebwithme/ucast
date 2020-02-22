@@ -12,7 +12,7 @@ defmodule UCast.Accounts.InfluencerProfile do
     field(:sns_url, :string)
     field(:follower_count, :string)
     field(:active, :boolean, default: false)
-
+    field(:price, Money.Ecto.Amount.Type)
     belongs_to(:user, User)
     belongs_to(:category, Category)
 
@@ -26,7 +26,7 @@ defmodule UCast.Accounts.InfluencerProfile do
 
   @doc false
   def changeset(%InfluencerProfile{} = profile, attrs) do
-    required_fields = [:phone_number, :sns_type, :follower_count, :active, :sns_url]
+    required_fields = [:price, :phone_number, :sns_type, :follower_count, :active, :sns_url]
     # sns_type is enum type in graphql schema.
     # It comes as atom, so I need to convert to string type
     %{:sns_type => sns_type} = attrs
@@ -60,8 +60,7 @@ defmodule UCast.Accounts.InfluencerProfile do
   end
 
   def category_insert_and_get(category) do
-    ## timestamp = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
-    ## category = Map.put(category, :inserted_at, timestamp) |> Map.put(:updated_at, timestamp)
+    # category: %{name: "category_name"}
     cat_changeset = Category.changeset(%Category{}, category)
     IO.puts("Printing category: +++++++++++++++++++++++++++++++++++++++++")
     IO.inspect(cat_changeset)

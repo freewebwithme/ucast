@@ -1,5 +1,5 @@
 #Internal package file, do not edit.
-#Tue Feb 11 12:47:13 PST 2020
+#Tue Feb 18 21:40:26 PST 2020
 60.set=NATIVE_RESOURCE
 52.set=NATIVE_RESOURCE
 53.base=/home/user/Projects/ucast/frontend/android/app/build/intermediates/transforms/mergeJniLibs/debug/0
