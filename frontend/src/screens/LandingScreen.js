@@ -69,8 +69,8 @@ export function LandingScreen({navigation}) {
       }
     },
     onError(error) {
-      console.log('Printng google sign in error:', error);
-      setError(error);
+      console.log('Printng google sign in error:', error.message);
+      setError(error.message);
     },
   });
 
