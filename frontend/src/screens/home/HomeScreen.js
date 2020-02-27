@@ -9,9 +9,10 @@ import {InfluencerCard} from '../../components/Card';
 
 const GET_INFLUENCER_FOR_HOMESCREEN = gql`
   query {
-    categoriesForHome(limit: 2) {
+    categoriesForHome(limit: 10) {
       id
       name
+      total
       influencerProfiles {
         price
         id
@@ -22,6 +23,12 @@ const GET_INFLUENCER_FOR_HOMESCREEN = gql`
         tags {
           id
           name
+        }
+        reviews {
+          content
+          user {
+            name
+          }
         }
       }
     }
@@ -41,7 +48,7 @@ export function HomeScreen(props) {
         {data.categoriesForHome.map(category => (
           <Layout key={category.id}>
             <Text category="h5" style={styles.header}>
-              {category.name}
+              {category.name}({category.total})
             </Text>
             <ScrollView horizontal={true}>
               {category.influencerProfiles.map(profile => (

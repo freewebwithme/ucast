@@ -4,16 +4,18 @@ defmodule UCast.Accounts.User do
   alias UCast.Accounts.User
 
   schema "users" do
-    field :email, :string
-    field :password, Comeonin.Ecto.Password
-    field :name, :string
-    field :avatar_url, :string
-    field :intro, :string
-    field :user_type, :string, default: "customer"
-    field :provider_name, :string, default: nil
-    field :provider_id, :string, default: nil
+    field(:email, :string)
+    field(:password, Comeonin.Ecto.Password)
+    field(:name, :string)
+    field(:avatar_url, :string)
+    field(:intro, :string)
+    field(:user_type, :string, default: "customer")
+    field(:provider_name, :string, default: nil)
+    field(:provider_id, :string, default: nil)
 
-    has_one :influencer_profile, UCast.Accounts.InfluencerProfile, on_delete: :delete_all
+    has_one(:influencer_profile, UCast.Accounts.InfluencerProfile, on_delete: :delete_all)
+    has_many(:reviews, UCast.Accounts.Review)
+    has_many(:reviewed_influencer, through: [:reviews, :influencer_profile])
     timestamps()
   end
 

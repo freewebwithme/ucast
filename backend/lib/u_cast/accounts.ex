@@ -6,7 +6,7 @@ defmodule UCast.Accounts do
   alias UCast.Repo
 
   alias UCast.Accounts
-  alias UCast.Accounts.{User, InfluencerProfile, Category}
+  alias UCast.Accounts.{User, InfluencerProfile, Category, Review}
 
   def list_users do
     Repo.all(User)
@@ -186,13 +186,18 @@ defmodule UCast.Accounts do
     raw_query =
       "SELECT * FROM categories c LEFT JOIN LATERAL (SELECT i.* FROM influencer_profiles i WHERE c.id = i.category_id ORDER BY i.updated_at LIMIT #{
         limit
-      }) i ON 1=1 INNER JOIN users u ON i.user_id = u.id"
+      }) i ON 1=1 LEFT JOIN users u ON i.user_id = u.id"
 
     {:ok, result} = Repo.query(raw_query)
 
     result
     |> load_categories_for_homescreen()
   end
+
+  @doc """
+  This function uses Repo.load() to build up Ecto Schema from
+  Repo.query()
+  """
 
   def load_categories_for_homescreen(query_result) do
     # Build categories
@@ -224,10 +229,42 @@ defmodule UCast.Accounts do
     #  put profiles_ready into categories
     grouped_profiles = profiles_ready |> Enum.group_by(& &1.category_id)
 
+    # Total influencer profiles for each category
+    total = get_influencer_total()
+
     categories_ready =
-      categories |> Enum.map(&%{&1 | influencer_profiles: Map.get(grouped_profiles, &1.id)})
+      categories
+      |> Enum.map(&%{&1 | influencer_profiles: Map.get(grouped_profiles, &1.id)})
+      |> Enum.sort_by(& &1.name)
+      |> Enum.map(
+        &Map.put(
+          &1,
+          :total,
+          Map.get(Enum.find(total, fn x -> x.category_name == &1.name end), :category_total)
+        )
+      )
 
     categories_ready
+  end
+
+  def get_influencer_total() do
+    query =
+      from(c in Category,
+        join: i in InfluencerProfile,
+        on: i.category_id == c.id,
+        group_by: c.name,
+        select: %{category_name: c.name, category_total: count()}
+      )
+
+    Repo.all(query) |> Enum.sort_by(& &1.category_name)
+  end
+
+  def create_review(user, influencer, attrs) do
+    %Review{}
+    |> Review.changeset(attrs)
+    |> Ecto.Changeset.put_assoc(:influencer_profile, influencer)
+    |> Ecto.Changeset.put_assoc(:user, user)
+    |> Repo.insert()
   end
 
   def datasource() do

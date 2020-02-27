@@ -1,9 +1,11 @@
 defmodule UCast.Seeds do
   alias UCast.Repo
-  alias UCast.Accounts.{User}
+  alias UCast.Accounts
+  alias UCast.Accounts.{User, InfluencerProfile, Review}
+  import Ecto.Query
 
   @tags [
-    "Youtuber, Mc",
+    "Youtuber, MC",
     "Entertainer, Actor",
     "Comedian, MC, Entertainer",
     "Singer, Teacher",
@@ -23,9 +25,46 @@ defmodule UCast.Seeds do
   ]
   @sns_names ["intagram", "youtube", "facebook", "twitter"]
   @prices [35000, 55000, 60000, 100_000, 200_000, 10000, 20000, 1_000_000]
+  @reviews [
+    "Thanks for your video",
+    "What a nice cameo!",
+    "You made my day",
+    "My husband was happy with your cameo"
+  ]
+
   # Create influencers
+  def create_influencer(attrs) do
+    attrs = Map.put(attrs, :user_type, "influencer")
+    user_changeset = User.changeset(%User{}, attrs)
+
+    # user_changeset_with_review = Ecto.Changeset.put_assoc(user_changeset, :reviews, attrs.reviews)
+    profile_changeset = InfluencerProfile.changeset(%InfluencerProfile{}, attrs)
+
+    # profile_changeset_with_review = Ecto.Changeset.put_assoc(profile_changeset, :reviews, attrs.reviews)
+
+    with true <- user_changeset.valid?,
+         true <- profile_changeset.valid? do
+      IO.puts("changesets are valid")
+
+      user_changeset
+      |> Ecto.Changeset.put_assoc(:influencer_profile, profile_changeset)
+      |> Repo.insert()
+    else
+      _ ->
+        IO.inspect(profile_changeset)
+    end
+  end
+
+  def create_review(user, influencer, attrs) do
+    %Review{}
+    |> Review.changeset(attrs)
+    |> Ecto.Changeset.put_assoc(:influencer_profile, influencer)
+    |> Ecto.Changeset.put_assoc(:user, user)
+    |> Repo.insert()
+  end
+
   def run() do
-    for x <- 0..100 do
+    for x <- 0..99 do
       attrs = %{
         name: "김구라#{x}",
         email: "user#{x}@example.com",
@@ -40,47 +79,34 @@ defmodule UCast.Seeds do
         category: %{name: Enum.random(@category)},
         tags: Enum.random(@tags),
         active: true,
-        price: Enum.random(@prices)
+        price: Enum.random(@prices),
+        reviews: [%{content: Enum.random(@reviews)}]
       }
 
-      UCast.Accounts.create_influencer(attrs)
+      create_influencer(attrs)
     end
 
-    # Users
-    _taehwan =
-      %User{}
-      |> User.changeset(%{
-        email: "taehwan@example.com",
+    for y <- 0..19 do
+      user_attrs = %{
+        name: "이경규#{y}",
+        email: "customer#{y}@example.com",
         password: "secret",
-        name: "taehwan",
-        avatar_url: "image url",
-        intro: "Hello this is the founder of Kameo",
-        user_type: "customer"
-      })
-      |> Repo.insert!()
+        avatar_url: Enum.random(@urls),
+        intro: "안녕하세요 이경규#{y} 입니다",
+        user_type: "customer",
+        reviews: [%{content: Enum.random(@reviews)}]
+      }
 
-    _jihye =
-      %User{}
-      |> User.changeset(%{
-        email: "jihye@example.com",
-        password: "secret",
-        name: "jijye",
-        avatar_url: "image url",
-        intro: "Hello this is the taehwan's wife",
-        user_type: "customer"
-      })
-      |> Repo.insert!()
+      Accounts.create_user(user_attrs)
+    end
 
-    _yoonseo =
-      %User{}
-      |> User.changeset(%{
-        email: "yoonseo@example.com",
-        password: "secret",
-        name: "yoonseo",
-        avatar_url: "image url",
-        intro: "Hello this is the co-founder of Kameo",
-        user_type: "customer"
+    all_influencers = Repo.all(from(i in InfluencerProfile))
+    all_customers = Repo.all(from(u in User, where: u.user_type == "customer"))
+
+    for z <- 0..199 do
+      create_review(Enum.random(all_customers), Enum.random(all_influencers), %{
+        content: Enum.random(@reviews)
       })
-      |> Repo.insert!()
+    end
   end
 end

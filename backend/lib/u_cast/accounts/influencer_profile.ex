@@ -1,7 +1,7 @@
 defmodule UCast.Accounts.InfluencerProfile do
   use Ecto.Schema
   import Ecto.Changeset
-  alias UCast.Accounts.{User, Tag, InfluencerProfile, Category}
+  alias UCast.Accounts.{User, Tag, InfluencerProfile, Category, Review}
   alias UCast.Repo
 
   import Ecto.Query, warn: false
@@ -15,6 +15,9 @@ defmodule UCast.Accounts.InfluencerProfile do
     field(:price, Money.Ecto.Amount.Type)
     belongs_to(:user, User)
     belongs_to(:category, Category)
+
+    has_many(:reviews, Review)
+    has_many(:reviewers, through: [:reviews, :user])
 
     many_to_many(:tags, Tag,
       join_through: "influencer_profile_tags",

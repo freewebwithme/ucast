@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, View, ImageBackground, Image} from 'react-native';
+import {StyleSheet, TouchableOpacity, ImageBackground} from 'react-native';
 import {Button, Layout, Text, Card} from '@ui-kitten/components';
 
 function CardHeader(props) {
@@ -14,25 +14,32 @@ function CardHeader(props) {
     </React.Fragment>
   );
 }
+
 export const InfluencerCard = props => {
   /* influencer has name, category and avatarUrl */
-  const {influencer} = props;
+  const {influencer, navigation} = props;
   return (
-    <Card
-      style={styles.card}
-      header={() => (
-        <CardHeader
-          image={influencer.user.avatarUrl}
-          price={influencer.price}
-        />
-      )}>
-      <Text style={{...styles.headerText, fontWeight: 'bold'}} category="s1">
-        {influencer.user.name}
-      </Text>
-      <Text style={styles.headerText} category="s1">
-        {influencer.tags[0].name}
-      </Text>
-    </Card>
+    <TouchableOpacity
+      onPress={() => {
+        console.log('Card Clicked!');
+        navigation.navigate('InfluencerScreen');
+      }}>
+      <Card
+        style={styles.card}
+        header={() => (
+          <CardHeader
+            image={influencer.user.avatarUrl}
+            price={influencer.price}
+          />
+        )}>
+        <Text style={{...styles.headerText, fontWeight: 'bold'}} category="s1">
+          {influencer.user.name}
+        </Text>
+        <Text style={styles.headerText} category="s1">
+          {influencer.tags[0].name}
+        </Text>
+      </Card>
+    </TouchableOpacity>
   );
 };
 

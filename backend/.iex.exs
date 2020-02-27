@@ -44,10 +44,29 @@ IEx.configure(
 )
 
 alias UCast.Accounts
-alias UCast.Accounts.{User, InfluencerProfile, Tag, Category}
+alias UCast.Accounts.{User, InfluencerProfile, Tag, Category, Review}
 alias UCast.Casting
 alias UCast.Casting.{Request}
 alias UCast.Repo
 alias Ecto.Changeset
 alias ExAws.{S3}
 import Ecto.Query
+import Ecto.Changeset
+
+saved_attrs = %{
+  name: "Taehwan",
+  email: "tattat@exmaple.com",
+  password: "secret",
+  avatar_url: "non",
+  intro: "Hello this is taehwan",
+  user_type: "influencer",
+  follower_count: "444444",
+  sns_type: "instagram",
+  sns_url: "www.instagram.com/taehwan",
+  phone_number: "213-505-5912",
+  category: %{name: "엠씨"},
+  tags: "Youtuber, MC",
+  active: true,
+  price: 500000,
+  reviews: [%{content: "Thanks for your video"}]
+}

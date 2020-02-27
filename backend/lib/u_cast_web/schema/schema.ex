@@ -147,6 +147,7 @@ defmodule UCastWeb.Schema.Schema do
     field(:category, :category, resolve: dataloader(Users, :category, []))
     field(:tags, list_of(:tags), resolve: dataloader(Users))
     field(:user, :user, resolve: dataloader(Users))
+    field(:reviews, :review, resolve: dataloader(Users))
   end
 
   object :tags do
@@ -164,6 +165,12 @@ defmodule UCastWeb.Schema.Schema do
     end
   end
 
+  object :review do
+    field(:content, non_null(:string))
+    field(:user, :user, resolve: dataloader(Users))
+    field(:influencer_profile, :influencer_profile, resolve: dataloader(Users))
+  end
+
   @doc """
   Special object type for only home screen
   """
@@ -171,6 +178,7 @@ defmodule UCastWeb.Schema.Schema do
   object :category_homescreen do
     field(:id, non_null(:integer))
     field(:name, non_null(:string))
+    field(:total, non_null(:integer))
 
     field :influencer_profiles, list_of(:influencer_profile_homescreen) do
       resolve(fn parent, _, _ ->
@@ -179,6 +187,11 @@ defmodule UCastWeb.Schema.Schema do
     end
   end
 
+  @doc """
+  Special influencer_profile object type for only home screen
+  infer user object from its parent(influencer_profile) directly
+  Because query result already has a data.
+  """
   object :influencer_profile_homescreen do
     field(:id, non_null(:integer))
 
@@ -205,6 +218,7 @@ defmodule UCastWeb.Schema.Schema do
     field(:active, non_null(:boolean))
     field(:category, :category, resolve: dataloader(Users, :category, []))
     field(:tags, list_of(:tags), resolve: dataloader(Users))
+    field(:reviews, list_of(:review), resolve: dataloader(Users))
 
     field :user, :user do
       resolve(fn parent, _, _ ->

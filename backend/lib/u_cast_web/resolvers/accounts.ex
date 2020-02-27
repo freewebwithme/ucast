@@ -96,4 +96,9 @@ defmodule UCastWeb.Resolvers.Accounts do
     categories = Accounts.get_categories_for_homescreen(limit)
     {:ok, categories}
   end
+
+  def get_influencer_total(_, _, _) do
+    total = Accounts.get_influencer_total()
+    {:ok, total}
+  end
 end
