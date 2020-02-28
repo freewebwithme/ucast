@@ -1,15 +1,13 @@
 import React, {useState} from 'react';
 import {KeyboardAvoidingView, View, StyleSheet} from 'react-native';
-import {TextInput, HelperText} from 'react-native-paper';
 import {useMutation} from '@apollo/react-hooks';
 import formStyles from '../styles/FormStyles';
 import {validateEmailLength, validateEmailFormat} from '../utils/Validators';
 import gql from 'graphql-tag';
-import {getStatusBarHeight} from 'react-native-status-bar-height';
 import {storage} from '../utils/Storage';
 import {UserTokenContext} from '../navigations/AppNavigator';
 import {createStackNavigator} from '@react-navigation/stack';
-import {Layout, Text, Button, Icon, Input} from '@ui-kitten/components';
+import {Layout, Text, Button, Input} from '@ui-kitten/components';
 import {LoadingIcon, LogInIcon, RightArrowIcon} from '../styles/Icons';
 
 const Stack = createStackNavigator();

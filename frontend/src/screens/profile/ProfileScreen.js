@@ -1,5 +1,5 @@
 import React from 'react';
-import {ScrollView, StyleSheet} from 'react-native';
+import {ScrollView, StyleSheet, TouchableOpacity} from 'react-native';
 import globalStyles from '../../styles/Global';
 import gql from 'graphql-tag';
 import {useQuery} from '@apollo/react-hooks';
@@ -25,10 +25,15 @@ const GET_USER_INFO = gql`
   }
 `;
 
+const avatarClick = () => {
+  console.log('Avatar clicked');
+};
 export function ProfileScreen(props) {
-  const {loading, error, data} = useQuery(GET_USER_INFO);
+  const {loading, error, data, refetch} = useQuery(GET_USER_INFO);
   const userInfo = data;
+  const {navigation} = props;
 
+  console.log('Inspecting refetch', refetch);
   if (error) return <Text>{error.message}</Text>;
   if (loading) return <Text>Loading...</Text>;
   return (
@@ -39,7 +44,9 @@ export function ProfileScreen(props) {
           alignItems: 'center',
           justifyContent: 'center',
         }}>
-        <Avatar size="giant" source={{uri: userInfo.me.avatarUrl}} />
+        <TouchableOpacity onPress={() => avatarClick()}>
+          <Avatar size="giant" source={{uri: userInfo.me.avatarUrl}} />
+        </TouchableOpacity>
         <Text style={styles.name}>{data && userInfo.me.name}</Text>
         {userInfo.me.intro && (
           <Card style={{margin: 20}}>
@@ -48,7 +55,11 @@ export function ProfileScreen(props) {
         )}
       </Layout>
       <Layout style={{...globalStyles.rowContainer, flex: 0.5}}>
-        <Button style={styles.margin5Button} appearance="ghost" icon={EditIcon}>
+        <Button
+          onPress={() => navigation.navigate('Edit', {me: userInfo.me})}
+          style={styles.margin5Button}
+          appearance="ghost"
+          icon={EditIcon}>
           수정하기
         </Button>
         <Button

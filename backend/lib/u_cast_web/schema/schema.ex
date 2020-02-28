@@ -83,6 +83,15 @@ defmodule UCastWeb.Schema.Schema do
       resolve(&Resolvers.Accounts.sign_in/3)
     end
 
+    @desc "Update User information"
+    field :update_me, :user do
+      arg(:email, :string)
+      arg(:name, :string)
+      arg(:intro, :string)
+      arg(:avatar_url, :string)
+      resolve(&Resolvers.Accounts.update_user/3)
+    end
+
     @desc "Request an account as Influencer"
     field :request_influencer, :session do
       arg(:email, non_null(:string))

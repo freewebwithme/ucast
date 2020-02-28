@@ -17,3 +17,9 @@ export const TvIcon = style => <Icon {...style} name="tv" />;
 export const BellIcon = style => <Icon {...style} name="bell" />;
 export const LockIcon = style => <Icon {...style} name="lock" />;
 export const FileTextIcon = style => <Icon {...style} name="file-text" />;
+export const CheckmarkCircleIcon = style => (
+  <Icon {...style} name="checkmark-circle-outline" />
+);
+export const CloseCircleIcon = style => (
+  <Icon {...style} name="close-circle-outline" />
+);

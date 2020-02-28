@@ -16,6 +16,15 @@ defmodule UCast.Accounts do
 
   def get_user(id), do: Repo.get(User, id)
 
+  def update_user(%User{} = user, args) do
+    IO.puts("Inspecting user")
+    IO.inspect(user)
+
+    user
+    |> Ecto.Changeset.change(args)
+    |> Repo.update()
+  end
+
   @doc """
   Get influencers from all user
   criteria - map of arguments. default is %{}

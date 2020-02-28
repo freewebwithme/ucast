@@ -76,6 +76,12 @@ defmodule UCastWeb.Resolvers.Accounts do
     {:ok, nil}
   end
 
+  def update_user(_, args, %{context: %{current_user: user}}) do
+    IO.puts("Updating user info")
+    {:ok, user} = Accounts.update_user(user, args)
+    {:ok, user}
+  end
+
   def request_influencer(_, args, _) do
     # Change sns_type to string.
     %{sns_type: sns_type} = args
