@@ -3,37 +3,9 @@ import {ScrollView, StyleSheet, View} from 'react-native';
 import globalStyles from '../../styles/Global';
 import {Searchbar} from 'react-native-paper';
 import {Layout, Text} from '@ui-kitten/components';
-import gql from 'graphql-tag';
 import {useQuery} from '@apollo/react-hooks';
 import {InfluencerCard} from '../../components/Card';
-
-const GET_INFLUENCER_FOR_HOMESCREEN = gql`
-  query {
-    categoriesForHome(limit: 10) {
-      id
-      name
-      total
-      influencerProfiles {
-        price
-        id
-        user {
-          name
-          avatarUrl
-        }
-        tags {
-          id
-          name
-        }
-        reviews {
-          content
-          user {
-            name
-          }
-        }
-      }
-    }
-  }
-`;
+import {GET_INFLUENCER_FOR_HOMESCREEN} from '../../queries/InfluencerQuery';
 
 export function HomeScreen(props) {
   const {loading, error, data} = useQuery(GET_INFLUENCER_FOR_HOMESCREEN);

@@ -5,45 +5,23 @@ import globalStyles from '../../styles/Global';
 import {CheckmarkCircleIcon, CloseCircleIcon} from '../../styles/Icons';
 import gql from 'graphql-tag';
 import {useMutation} from '@apollo/react-hooks';
-
-const UPDATE_ME = gql`
-  mutation($email: String, $name: String, $intro: String, $avatarUrl: String) {
-    updateMe(email: $email, name: $name, intro: $intro, avatarUrl: $avatarUrl) {
-      name
-      email
-      intro
-      avatarUrl
-    }
-  }
-`;
-
-const GET_USER_INFO = gql`
-  query {
-    me {
-      name
-      avatarUrl
-      email
-      intro
-    }
-  }
-`;
+import {UPDATE_ME, GET_USER_INFO} from '../../queries/UserQuery';
 
 export function EditProfileScreen({route, navigation}) {
-  /* Get parameters from ProfileScreen
-     me -> user schema
-     refetch -> refetch() from useQuery() in ProfileScreen */
-  const {me} = route.params;
+  /* Get user info from Profile page for
+     init value for state */
+  const {savedMe} = route.params;
 
-  console.log('Inspecting params', route.params);
-  const [email, setEmail] = React.useState(me.email);
-  const [name, setName] = React.useState(me.name);
-  const [intro, setIntro] = React.useState(me.intro);
-  const [avatarUrl, setAvatarUrl] = React.useState(me.avatarUrl);
-
+  const [email, setEmail] = React.useState(savedMe.email);
+  const [name, setName] = React.useState(savedMe.name);
+  const [intro, setIntro] = React.useState(savedMe.intro);
+  const [avatarUrl, setAvatarUrl] = React.useState(savedMe.avatarUrl);
   const [errorOnUpdate, setErrorOnUpdate] = React.useState('');
+
   const [updateMe, {loading, client}] = useMutation(UPDATE_ME, {
     onCompleted(data) {
       console.log('Me updated completed');
+      navigation.goBack();
     },
     onError(error) {
       console.log('Printing update me error', error.message);
@@ -52,10 +30,12 @@ export function EditProfileScreen({route, navigation}) {
     refetchQueries: [{query: GET_USER_INFO}],
   });
 
-  if (loading) {
-    console.log('Upading...');
-    return <Text>Updating....</Text>;
-  }
+  //if (loading) {
+  //  console.log('Upading...');
+  //  return <Text>Updating....</Text>;
+  //}
+
+  const {me} = client.readQuery({query: GET_USER_INFO});
 
   return (
     <Layout style={styles.mainContainer}>
@@ -63,7 +43,7 @@ export function EditProfileScreen({route, navigation}) {
         <Avatar
           size="giant"
           source={{uri: me.avatarUrl}}
-          style={{width: 200, height: 200, marginBottom: 50}}
+          style={{width: 150, height: 150, marginBottom: 50}}
         />
         <Input
           label="이름"

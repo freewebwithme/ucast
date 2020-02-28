@@ -1,7 +1,6 @@
 import React from 'react';
-import {ScrollView, StyleSheet, TouchableOpacity} from 'react-native';
+import {StyleSheet, TouchableOpacity} from 'react-native';
 import globalStyles from '../../styles/Global';
-import gql from 'graphql-tag';
 import {useQuery} from '@apollo/react-hooks';
 import {Layout, Avatar, Button, Text, Card} from '@ui-kitten/components';
 import {
@@ -13,17 +12,7 @@ import {
   LockIcon,
   FileTextIcon,
 } from '../../styles/Icons';
-
-const GET_USER_INFO = gql`
-  query {
-    me {
-      name
-      avatarUrl
-      email
-      intro
-    }
-  }
-`;
+import {GET_USER_INFO} from '../../queries/UserQuery';
 
 const avatarClick = () => {
   console.log('Avatar clicked');
@@ -56,7 +45,7 @@ export function ProfileScreen(props) {
       </Layout>
       <Layout style={{...globalStyles.rowContainer, flex: 0.5}}>
         <Button
-          onPress={() => navigation.navigate('Edit', {me: userInfo.me})}
+          onPress={() => navigation.navigate('Edit', {savedMe: userInfo.me})}
           style={styles.margin5Button}
           appearance="ghost"
           icon={EditIcon}>

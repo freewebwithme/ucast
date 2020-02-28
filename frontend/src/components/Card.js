@@ -16,32 +16,30 @@ function CardHeader(props) {
 }
 
 const profileOnClick = () => {
-  //  console.log('Card Clicked!');
+  console.log('Card Clicked!');
   //navigation.navigate('InfluencerScreen');
-  alert('Card clicked');
 };
 
 export const InfluencerCard = props => {
   /* influencer has name, category and avatarUrl */
   const {influencer, navigation} = props;
   return (
-    <TouchableOpacity onPress={() => profileOnClick()}>
-      <Card
-        style={styles.card}
-        header={() => (
-          <CardHeader
-            image={influencer.user.avatarUrl}
-            price={influencer.price}
-          />
-        )}>
-        <Text style={{...styles.headerText, fontWeight: 'bold'}} category="s1">
-          {influencer.user.name}
-        </Text>
-        <Text style={styles.headerText} category="c2">
-          {influencer.tags[0].name}
-        </Text>
-      </Card>
-    </TouchableOpacity>
+    <Card
+      onPress={() => profileOnClick()}
+      style={styles.card}
+      header={() => (
+        <CardHeader
+          image={influencer.user.avatarUrl}
+          price={influencer.price}
+        />
+      )}>
+      <Text style={{...styles.headerText, fontWeight: 'bold'}} category="s1">
+        {influencer.user.name}
+      </Text>
+      <Text style={styles.headerText} category="c2">
+        {influencer.tags[0].name}
+      </Text>
+    </Card>
   );
 };
 
