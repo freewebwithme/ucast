@@ -15,17 +15,17 @@ function CardHeader(props) {
   );
 }
 
-const profileOnClick = () => {
-  console.log('Card Clicked!');
-  //navigation.navigate('InfluencerScreen');
-};
-
 export const InfluencerCard = props => {
   /* influencer has name, category and avatarUrl */
-  const {influencer, navigation} = props;
+  const {influencer, navigations} = props;
   return (
     <Card
-      onPress={() => profileOnClick()}
+      onPress={() => {
+        console.log('Card clicked');
+        navigations.navigate('InfluencerScreen', {
+          influencer: influencer,
+        });
+      }}
       style={styles.card}
       header={() => (
         <CardHeader

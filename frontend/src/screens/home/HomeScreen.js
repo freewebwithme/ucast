@@ -9,6 +9,7 @@ import {GET_INFLUENCER_FOR_HOMESCREEN} from '../../queries/InfluencerQuery';
 
 export function HomeScreen(props) {
   const {loading, error, data} = useQuery(GET_INFLUENCER_FOR_HOMESCREEN);
+  const {navigation} = props;
 
   if (loading) return <Text>Loading...</Text>;
   if (error) return <Text>Error....${error.message}</Text>;
@@ -25,7 +26,10 @@ export function HomeScreen(props) {
             <ScrollView horizontal={true}>
               {category.influencerProfiles.map(profile => (
                 <View key={profile.id} style={{padding: 5}}>
-                  <InfluencerCard influencer={profile} />
+                  <InfluencerCard
+                    influencer={profile}
+                    navigations={navigation}
+                  />
                 </View>
               ))}
             </ScrollView>

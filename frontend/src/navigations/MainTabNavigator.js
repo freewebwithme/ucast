@@ -29,14 +29,51 @@ const BottomTabBar = ({navigation, state}) => {
   );
 };
 
+const getHeaderTitle = route => {
+  // Access the tab navigator's state using `route.state`
+  const routeName = route.state
+    ? route.state.routes[route.state.index].name
+    : route.params?.screen || 'Home';
+  console.log('Printing route: ', route);
+  switch (routeName) {
+    case 'Home':
+      return 'My Home';
+    case 'Notification':
+      return 'My Notification';
+    case 'Profile':
+      return 'My Profile';
+  }
+};
+
+/* Hide bottom tab bar in child screen */
+function tabBarToggle(route) {
+  const routeIndex = route.state.index;
+  console.log('Printing route index: ', routeIndex);
+  switch (routeIndex) {
+    case 0:
+      return true;
+    default:
+      return false;
+  }
+}
+
 export function MainTabNavigator() {
   return (
     <Tab.Navigator
       initialRouteName="Home"
       tabBar={props => <BottomTabBar {...props} />}>
-      <Tab.Screen name="Home" component={HomeStack} />
+      <Tab.Screen
+        name="Home"
+        headerShown="false"
+        component={HomeStack}
+        options={({route}) => ({tabBarVisible: tabBarToggle(route)})}
+      />
       <Tab.Screen name="Notification" component={NotificationScreen} />
-      <Tab.Screen name="Profile" component={ProfileStack} />
+      <Tab.Screen
+        name="Profile"
+        component={ProfileStack}
+        options={({route}) => ({tabBarVisible: tabBarToggle(route)})}
+      />
     </Tab.Navigator>
   );
 }

@@ -1,11 +1,24 @@
 import React from 'react';
-import {ScrollView, StyleSheet, View} from 'react-native';
+import {ScrollView, StyleSheet, View, TouchableOpacity} from 'react-native';
 import {Layout, Text, Button, Input, Avatar} from '@ui-kitten/components';
 import globalStyles from '../../styles/Global';
 import {CheckmarkCircleIcon, CloseCircleIcon} from '../../styles/Icons';
 import gql from 'graphql-tag';
 import {useMutation} from '@apollo/react-hooks';
 import {UPDATE_ME, GET_USER_INFO} from '../../queries/UserQuery';
+import ImagePicker from 'react-native-image-crop-picker';
+
+const pickImage = () => {
+  console.log('Loading Image picker....');
+  ImagePicker.openPicker({
+    width: 300,
+    height: 300,
+    cropping: true,
+  }).then(image => {
+    // TODO: Upload image to Amazon S3
+    console.log(image);
+  });
+};
 
 export function EditProfileScreen({route, navigation}) {
   /* Get user info from Profile page for
@@ -40,11 +53,13 @@ export function EditProfileScreen({route, navigation}) {
   return (
     <Layout style={styles.mainContainer}>
       <Layout style={globalStyles.colContainer}>
-        <Avatar
-          size="giant"
-          source={{uri: me.avatarUrl}}
-          style={{width: 150, height: 150, marginBottom: 50}}
-        />
+        <TouchableOpacity onPress={() => pickImage()}>
+          <Avatar
+            size="giant"
+            source={{uri: me.avatarUrl}}
+            style={{width: 150, height: 150, marginBottom: 50}}
+          />
+        </TouchableOpacity>
         <Input
           label="이름"
           style={styles.marginTop20}
