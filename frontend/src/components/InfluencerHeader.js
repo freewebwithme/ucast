@@ -10,6 +10,7 @@ import {BackIcon} from '../styles/Icons';
 import {HeartIcon} from '../styles/Icons';
 import {Button} from '@ui-kitten/components';
 import Animated from 'react-native-reanimated';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 const windowWidth = Dimensions.get('window').width;
 
@@ -23,36 +24,38 @@ export function InfluencerHeader(props) {
   console.log('Printing Props: ', props);
   const opacity = scene.route.params.opacity;
   return (
-    <React.Fragment>
-      <Animated.View style={[styles.headerStyle, {opacity}]}>
-        <View style={styles.influencerNameContainer}>
-          <Text style={styles.influencerName}>
-            {scene.route.params.influencer.user.name}
-          </Text>
-        </View>
-      </Animated.View>
-      <View
-        style={{
-          position: 'absolute',
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          width: windowWidth,
-        }}>
-        {previous ? (
-          /* This is a back button */
-          <InfluencerBackButton
-            style={{left: 0}}
-            onPress={() => navigation.goBack()}
+    <SafeAreaView>
+      <React.Fragment>
+        <Animated.View style={[styles.headerStyle, {opacity}]}>
+          <View style={styles.influencerNameContainer}>
+            <Text style={styles.influencerName}>
+              {scene.route.params.influencer.user.name}
+            </Text>
+          </View>
+        </Animated.View>
+        <View
+          style={{
+            position: 'absolute',
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            width: windowWidth,
+          }}>
+          {previous ? (
+            /* This is a back button */
+            <InfluencerBackButton
+              style={{left: 0}}
+              onPress={() => navigation.goBack()}
+            />
+          ) : (
+            undefined
+          )}
+          <InfluencerWishButton
+            onPress={() => alert('wish button clicked')}
+            style={{right: 0}}
           />
-        ) : (
-          undefined
-        )}
-        <InfluencerWishButton
-          onPress={() => alert('wish button clicked')}
-          style={{right: 0}}
-        />
-      </View>
-    </React.Fragment>
+        </View>
+      </React.Fragment>
+    </SafeAreaView>
   );
 }
 
