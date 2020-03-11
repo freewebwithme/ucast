@@ -10,6 +10,7 @@ import {Chip} from 'react-native-paper';
 import {Rating, AirbnbRating} from 'react-native-elements';
 import {GET_INFLUENCER} from '../../queries/InfluencerQuery';
 import {VolumeOffIcon, VolumeOnIcon} from '../../styles/Icons';
+import {useSafeArea} from 'react-native-safe-area-context';
 
 const {height} = Dimensions.get('window');
 console.log('Printing dimensions: ', height);
@@ -20,10 +21,12 @@ const {Value, interpolate, Extrapolate} = Animated;
 export const translationY = new Value(0);
 
 export function InfluencerScreen({route, navigation}) {
+    const insets = useSafeArea();
+    
   const [player, setPlayer] = React.useState(null);
   const [muteStatus, setMuteStatus] = React.useState(true);
   const headerOpacity = interpolate(translationY, {
-    inputRange: [0, BUTTON_CONTAINER_HEIGHT, height - getStatusBarHeight()],
+      inputRange: [0, BUTTON_CONTAINER_HEIGHT, height - insets.top], 
     outputRange: [0, 1, 1],
     extrapolate: Extrapolate.CLAMP,
   });

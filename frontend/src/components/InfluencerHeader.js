@@ -10,12 +10,13 @@ import {BackIcon} from '../styles/Icons';
 import {HeartIcon} from '../styles/Icons';
 import {Button} from '@ui-kitten/components';
 import Animated from 'react-native-reanimated';
-import {SafeAreaView} from 'react-native-safe-area-context';
+import {SafeAreaView, useSafeArea} from 'react-native-safe-area-context';
 
 const windowWidth = Dimensions.get('window').width;
 
 export function InfluencerHeader(props) {
   const {scene, previous, navigation} = props;
+    const insets = useSafeArea();
 
   function buttonPressed(e) {
     e.preventDefault();
@@ -24,10 +25,9 @@ export function InfluencerHeader(props) {
   console.log('Printing Props: ', props);
   const opacity = scene.route.params.opacity;
   return (
-    <SafeAreaView>
       <React.Fragment>
-        <Animated.View style={[styles.headerStyle, {opacity}]}>
-          <View style={styles.influencerNameContainer}>
+        <Animated.View style={[styles.headerStyle, {opacity, paddingTop: insets.top }]}>
+          <View style={[styles.influencerNameContainer, {paddingTop: insets.top}]}>
             <Text style={styles.influencerName}>
               {scene.route.params.influencer.user.name}
             </Text>
@@ -38,6 +38,7 @@ export function InfluencerHeader(props) {
             position: 'absolute',
             flexDirection: 'row',
             justifyContent: 'space-between',
+              paddingTop: insets.top,
             width: windowWidth,
           }}>
           {previous ? (
@@ -55,7 +56,6 @@ export function InfluencerHeader(props) {
           />
         </View>
       </React.Fragment>
-    </SafeAreaView>
   );
 }
 
@@ -86,13 +86,13 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     flexDirection: 'row',
     position: 'absolute',
-    top: 0,
+//    top: 0,
     height: 60,
     width: windowWidth,
   },
   influencerNameContainer: {
     position: 'absolute',
-    top: 0,
+ //   top: 0,
     left: 0,
     right: 0,
     bottom: 0,
@@ -110,7 +110,7 @@ const styles = StyleSheet.create({
     height: 45,
     borderRadius: 45 / 2,
     backgroundColor: 'white',
-    top: 0,
+  //  top: 0,
     //    position: 'absolute',
   },
 });
