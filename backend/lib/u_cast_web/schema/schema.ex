@@ -46,6 +46,12 @@ defmodule UCastWeb.Schema.Schema do
       arg(:id, non_null(:integer))
       resolve(&Resolvers.Accounts.get_category/3)
     end
+
+    @desc "Get an Influencer"
+    field :influencer, :influencer_profile do
+      arg(:id, non_null(:id))
+      resolve(&Resolvers.Accounts.get_influencer/3)
+    end
   end
 
   mutation do
@@ -156,7 +162,7 @@ defmodule UCastWeb.Schema.Schema do
     field(:category, :category, resolve: dataloader(Users, :category, []))
     field(:tags, list_of(:tags), resolve: dataloader(Users))
     field(:user, :user, resolve: dataloader(Users))
-    field(:reviews, :review, resolve: dataloader(Users))
+    field(:reviews, list_of(:review), resolve: dataloader(Users))
   end
 
   object :tags do

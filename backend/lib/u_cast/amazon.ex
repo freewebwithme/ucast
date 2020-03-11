@@ -7,6 +7,15 @@ defmodule UCast.Amazon do
   alias UUID
 
   @doc """
+  Generate user's profile folder and file name
+  """
+  def create_profile_image_name(file_path, username) do
+    extension = Path.extname(file_path)
+    s3_filename = "#{username}/profile/profile#{extension}"
+    s3_filename
+  end
+
+  @doc """
   Generate new s3 filename in this format
   username/current_date/randomname.extension
   ex)

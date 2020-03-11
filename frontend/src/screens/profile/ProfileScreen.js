@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, TouchableOpacity} from 'react-native';
+import {StyleSheet} from 'react-native';
 import globalStyles from '../../styles/Global';
 import {useQuery} from '@apollo/react-hooks';
 import {Layout, Avatar, Button, Text, Card} from '@ui-kitten/components';
@@ -14,15 +14,11 @@ import {
 } from '../../styles/Icons';
 import {GET_USER_INFO} from '../../queries/UserQuery';
 
-const avatarClick = () => {
-  console.log('Avatar clicked');
-};
 export function ProfileScreen(props) {
   const {loading, error, data, refetch} = useQuery(GET_USER_INFO);
   const userInfo = data;
   const {navigation} = props;
 
-  console.log('Inspecting refetch', refetch);
   if (error) return <Text>{error.message}</Text>;
   if (loading) return <Text>Loading...</Text>;
   return (
@@ -33,9 +29,7 @@ export function ProfileScreen(props) {
           alignItems: 'center',
           justifyContent: 'center',
         }}>
-        <TouchableOpacity onPress={() => avatarClick()}>
-          <Avatar size="giant" source={{uri: userInfo.me.avatarUrl}} />
-        </TouchableOpacity>
+        <Avatar size="giant" source={{uri: userInfo.me.avatarUrl}} />
         <Text style={styles.name}>{data && userInfo.me.name}</Text>
         {userInfo.me.intro && (
           <Card style={{margin: 20}}>

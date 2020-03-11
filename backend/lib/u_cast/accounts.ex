@@ -25,6 +25,10 @@ defmodule UCast.Accounts do
     |> Repo.update()
   end
 
+  def get_influencer(id) do
+    Repo.get_by(InfluencerProfile, id: id)
+  end
+
   @doc """
   Get influencers from all user
   criteria - map of arguments. default is %{}

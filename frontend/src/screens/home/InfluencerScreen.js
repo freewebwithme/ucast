@@ -1,53 +1,207 @@
 import React from 'react';
 import {ScrollView, StyleSheet, View, Dimensions} from 'react-native';
-import {Layout, Text} from '@ui-kitten/components';
-import gql from 'graphql-tag';
+import {Layout, Text, Button} from '@ui-kitten/components';
 import {useQuery} from '@apollo/react-hooks';
 import Video from 'react-native-video';
-import globalStyles from '../../styles/Global';
+import Animated from 'react-native-reanimated';
+import {onScroll} from 'react-native-redash';
+import {getStatusBarHeight} from 'react-native-status-bar-height';
+import {Chip} from 'react-native-paper';
+import {Rating, AirbnbRating} from 'react-native-elements';
+import {GET_INFLUENCER} from '../../queries/InfluencerQuery';
+import {VolumeOffIcon, VolumeOnIcon} from '../../styles/Icons';
 
-export function InfluencerScreen({route}) {
+const {height} = Dimensions.get('window');
+console.log('Printing dimensions: ', height);
+const BUTTON_CONTAINER_HEIGHT = height / 1.7;
+
+const {Value, interpolate, Extrapolate} = Animated;
+
+export const translationY = new Value(0);
+
+export function InfluencerScreen({route, navigation}) {
+  const [player, setPlayer] = React.useState(null);
+  const [muteStatus, setMuteStatus] = React.useState(true);
+  const headerOpacity = interpolate(translationY, {
+    inputRange: [0, BUTTON_CONTAINER_HEIGHT, height - getStatusBarHeight()],
+    outputRange: [0, 1, 1],
+    extrapolate: Extrapolate.CLAMP,
+  });
+
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <Button onPress={() => alert('Right button clicked')} title="Right" />
+      ),
+    });
+  });
+  /* Pass animated value (headeOpacity) for
+    header opacity animation */
+  React.useEffect(() => {
+    navigation.setParams({
+      opacity: headerOpacity,
+    });
+  }, []);
+
   const {influencer} = route.params;
-  let player;
-  console.log('Inspecting influencer', influencer);
+  console.log('Printing Influencer: ', influencer.id);
+  const {loading, error, data} = useQuery(GET_INFLUENCER, {
+    variables: {id: influencer.id},
+  });
+
+  if (loading) return <Text>Loading...</Text>;
+  if (error) return <Text>Error....`{error.message}`</Text>;
+
+  function ratingCompleted(rating) {
+    console.log('Rating completed: ', rating);
+  }
+
+  /* Toggle mute value */
+  function muteButtonPressed() {
+    if (player) {
+      setMuteStatus(prev => {
+        return !muteStatus;
+      });
+    } else {
+      return muteStatus;
+    }
+  }
+
+  /* Animated value for Button Container Opacity
+     When scroll up, opacity changes from 1 to 0 */
+  const opacity = interpolate(translationY, {
+    inputRange: [
+      0,
+      BUTTON_CONTAINER_HEIGHT - 100,
+      height - getStatusBarHeight(),
+    ],
+    outputRange: [1, 0, 0],
+    extrapolate: Extrapolate.CLAMP,
+  });
+
+  /* When scroll up, Book button show up from the bottom */
+  const moveButton = interpolate(translationY, {
+    inputRange: [
+      0,
+      BUTTON_CONTAINER_HEIGHT - 100,
+      height - getStatusBarHeight(),
+    ],
+    outputRange: [100, 0, 0],
+    extrapolate: Extrapolate.CLAMP,
+  });
+
+  console.log('Printing Player: ', player);
+
   return (
     <Layout style={{flex: 1}}>
-      <Layout style={styles.videoContainer}>
+      <View style={styles.videoContainer}>
         <Video
           source={{
             uri:
               'https://u-cast-converted-video.s3-us-west-2.amazonaws.com/assets/download.mp4',
           }}
           ref={ref => {
-            player = ref;
+            setPlayer(ref);
           }}
-          muted={true}
+          muted={muteStatus}
           repeat={false}
           onBuffer={() => onBuffer()}
           onError={() => onVideoError()}
           style={styles.video}
           resizeMode={'cover'}
         />
-        <ScrollView style={{marginTop: 200}}>
-          <Text style={{height: 200}}> Hello World!</Text>
-          <Text style={{height: 200}}> Hello World!</Text>
-          <Text style={{height: 200}}> Hello World!</Text>
-          <Text style={{height: 200}}> Hello World!</Text>
-          <Text style={{height: 200}}> Hello World!</Text>
-        </ScrollView>
-      </Layout>
+        <Animated.ScrollView
+          onScroll={onScroll({y: translationY})}
+          showVerticalScrollIndicator={false}
+          scrollEventThrottle={1}>
+          <Animated.View style={[styles.buttonContainer, {opacity}]}>
+            <Animated.Text
+              style={{color: 'white', fontSize: 36, marginBottom: 10}}>
+              {data.influencer.user.name}
+            </Animated.Text>
+            <Animated.Text
+              style={{color: 'white', fontSize: 24, marginBottom: 10}}>
+              {data.influencer.category.name}
+            </Animated.Text>
+            <Button status="success">예약하기 {data.influencer.price}</Button>
+          </Animated.View>
+          <View style={styles.contentContainer}>
+            <Rating
+              ratingCount={5}
+              imageSize={20}
+              showRating
+              style={{paddingVertical: 10}}
+              onFinishRating={ratingCompleted}
+            />
+            <Text category="h2" style={styles.textStyle}>
+              {data.influencer.user.intro}
+            </Text>
+            <View style={{flexDirection: 'row'}}>
+              {data.influencer.tags.map(tag => (
+                <Chip key={tag.id} style={{marginHorizontal: 5}}>
+                  {tag.name}
+                </Chip>
+              ))}
+            </View>
+            <Text category="h3" style={styles.textStyle}>
+              Hello World-3
+            </Text>
+            <Text category="h3" style={styles.textStyle}>
+              Hello World-4
+            </Text>
+            <Text category="h3" style={styles.textStyle}>
+              Hello World-5
+            </Text>
+            <Text category="h3" style={styles.textStyle}>
+              Hello World-6
+            </Text>
+            <Text category="h3" style={styles.textStyle}>
+              Hello World-7
+            </Text>
+            <Text category="h3" style={styles.textStyle}>
+              Hello World-6
+            </Text>
+            <Text category="h3" style={styles.textStyle}>
+              Hello World-7
+            </Text>
+          </View>
+        </Animated.ScrollView>
+        <Button
+          appearance="ghost"
+          status="basic"
+          style={styles.muteButton}
+          icon={
+            player
+              ? player.props.muted
+                ? VolumeOffIcon
+                : VolumeOnIcon
+              : VolumeOffIcon
+          }
+          onPress={muteButtonPressed}
+        />
+        <Animated.View
+          style={{
+            position: 'absolute',
+            bottom: 0,
+            left: 0,
+            right: 0,
+            backgroundColor: 'white',
+            transform: [{translateY: moveButton}],
+          }}>
+          <Button status="success" style={{height: 60, margin: 20}}>
+            예약하기 {data.influencer.price}
+          </Button>
+        </Animated.View>
+      </View>
     </Layout>
   );
 }
 
-const {height} = Dimensions.get('window');
-console.log('Printing dimensions: ', height);
 const styles = StyleSheet.create({
   videoContainer: {
     flex: 1,
     flexDirection: 'column',
     position: 'relative',
-    backgroundColor: 'red',
   },
   video: {
     height: height,
@@ -58,5 +212,38 @@ const styles = StyleSheet.create({
     right: 0,
     top: 0,
     bottom: 0,
+  },
+  textStyle: {
+    height: 100,
+    fontSize: 24,
+    marginTop: 10,
+  },
+  muteButton: {
+    width: 30,
+    height: 30,
+    position: 'absolute',
+    left: 20,
+    top: height / 2,
+    backgroundColor: 'white',
+    borderRadius: 20,
+  },
+  buttonContainer: {
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    height: BUTTON_CONTAINER_HEIGHT,
+    marginBottom: 30,
+  },
+  contentContainer: {
+    backgroundColor: 'white',
+    borderTopRightRadius: 30,
+    borderTopLeftRadius: 30,
+    alignItems: 'center',
+  },
+  detailScrollView: {
+    backgroundColor: 'white',
+    borderRadius: 30,
+    marginTop: 50,
   },
 });

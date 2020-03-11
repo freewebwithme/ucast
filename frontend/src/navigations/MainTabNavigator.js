@@ -29,35 +29,39 @@ const BottomTabBar = ({navigation, state}) => {
   );
 };
 
-const getHeaderTitle = route => {
-  // Access the tab navigator's state using `route.state`
-  const routeName = route.state
-    ? route.state.routes[route.state.index].name
-    : route.params?.screen || 'Home';
-  console.log('Printing route: ', route);
-  switch (routeName) {
-    case 'Home':
-      return 'My Home';
-    case 'Notification':
-      return 'My Notification';
-    case 'Profile':
-      return 'My Profile';
-  }
-};
-
 /* Hide bottom tab bar in child screen */
-function tabBarToggle(route) {
-  const routeIndex = route.state.index;
-  console.log('Printing route index: ', routeIndex);
-  switch (routeIndex) {
-    case 0:
-      return true;
-    default:
-      return false;
-  }
-}
+//function tabBarToggle(route) {
+//  const routeIndex = route.state.index;
+//  console.log('Printing route index: ', routeIndex);
+//  switch (routeIndex) {
+//    case 0:
+//      return true;
+//    default:
+//      return false;
+//  }
+//}
 
 export function MainTabNavigator() {
+  /* route.state may not exist for first app loading  */
+  const checkRouteState = route => {
+    if (route.state) {
+      return route.state.index === 0 ? true : false;
+    } else {
+      return true;
+    }
+  };
+  const tabBarToggle = route => {
+    switch (route.name) {
+      case 'Home':
+        return checkRouteState(route);
+      case 'Profile':
+        return checkRouteState(route);
+      case 'Notification':
+        return checkRouteState(route);
+      default:
+        return false;
+    }
+  };
   return (
     <Tab.Navigator
       initialRouteName="Home"

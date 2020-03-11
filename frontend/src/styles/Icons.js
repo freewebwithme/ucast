@@ -23,3 +23,15 @@ export const CheckmarkCircleIcon = style => (
 export const CloseCircleIcon = style => (
   <Icon {...style} name="close-circle-outline" />
 );
+
+export const BackIcon = style => (
+  <Icon {...style} name="arrow-ios-back-outline" />
+);
+
+export const VolumeOffIcon = style => (
+  <Icon {...style} name="volume-off-outline" />
+);
+
+export const VolumeOnIcon = style => (
+  <Icon {...style} name="volume-up-outline" />
+);

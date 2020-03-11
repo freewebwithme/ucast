@@ -98,6 +98,11 @@ defmodule UCastWeb.Resolvers.Accounts do
     {:ok, Repo.one(query)}
   end
 
+  def get_influencer(_, %{id: id}, _) do
+    influencer = Accounts.get_influencer(id)
+    {:ok, influencer}
+  end
+
   def get_categories_for_homescreen(_, %{limit: limit}, _) do
     categories = Accounts.get_categories_for_homescreen(limit)
     {:ok, categories}

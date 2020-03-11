@@ -11,6 +11,7 @@ export const GET_INFLUENCER_FOR_HOMESCREEN = gql`
         id
         user {
           name
+          intro
           avatarUrl
         }
         tags {
@@ -23,6 +24,35 @@ export const GET_INFLUENCER_FOR_HOMESCREEN = gql`
             name
           }
         }
+      }
+    }
+  }
+`;
+
+export const GET_INFLUENCER = gql`
+  query($id: ID!) {
+    influencer(id: $id) {
+      active
+      category {
+        id
+        name
+      }
+      user {
+        name
+        email
+        avatarUrl
+        intro
+      }
+      price
+      reviews {
+        content
+        user {
+          name
+        }
+      }
+      tags {
+        id
+        name
       }
     }
   }
