@@ -65,7 +65,12 @@ export function MainTabNavigator() {
   return (
     <Tab.Navigator
       initialRouteName="Home"
-      tabBar={props => <BottomTabBar {...props} />}>
+      tabBar={props => <BottomTabBar {...props} />}
+      tabBarOptions={{
+        showLabel: 'false',
+        showIcon: false,
+        activeTintColor: 'blue',
+      }}>
       <Tab.Screen
         name="Home"
         headerShown="false"

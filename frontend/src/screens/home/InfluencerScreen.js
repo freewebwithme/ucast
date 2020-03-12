@@ -13,41 +13,32 @@ import {VolumeOffIcon, VolumeOnIcon} from '../../styles/Icons';
 import {useSafeArea} from 'react-native-safe-area-context';
 
 const {height} = Dimensions.get('window');
-console.log('Printing dimensions: ', height);
-const BUTTON_CONTAINER_HEIGHT = height / 1.7;
+const BUTTON_CONTAINER_HEIGHT = height / 1.5;
 
 const {Value, interpolate, Extrapolate} = Animated;
 
-export const translationY = new Value(0);
+const translationY = new Value(0);
 
 export function InfluencerScreen({route, navigation}) {
-    const insets = useSafeArea();
-    
+  const insets = useSafeArea();
+
   const [player, setPlayer] = React.useState(null);
   const [muteStatus, setMuteStatus] = React.useState(true);
   const headerOpacity = interpolate(translationY, {
-      inputRange: [0, BUTTON_CONTAINER_HEIGHT, height - insets.top], 
+    inputRange: [0, BUTTON_CONTAINER_HEIGHT, height - insets.top],
     outputRange: [0, 1, 1],
     extrapolate: Extrapolate.CLAMP,
   });
 
-  React.useLayoutEffect(() => {
-    navigation.setOptions({
-      headerRight: () => (
-        <Button onPress={() => alert('Right button clicked')} title="Right" />
-      ),
-    });
-  });
   /* Pass animated value (headeOpacity) for
     header opacity animation */
   React.useEffect(() => {
     navigation.setParams({
       opacity: headerOpacity,
     });
-  }, []);
+  }, [navigation]);
 
   const {influencer} = route.params;
-  console.log('Printing Influencer: ', influencer.id);
   const {loading, error, data} = useQuery(GET_INFLUENCER, {
     variables: {id: influencer.id},
   });
@@ -63,7 +54,7 @@ export function InfluencerScreen({route, navigation}) {
   function muteButtonPressed() {
     if (player) {
       setMuteStatus(prev => {
-        return !muteStatus;
+        return !prev;
       });
     } else {
       return muteStatus;
@@ -93,10 +84,10 @@ export function InfluencerScreen({route, navigation}) {
     extrapolate: Extrapolate.CLAMP,
   });
 
-  console.log('Printing Player: ', player);
-
   return (
-    <Layout style={{flex: 1}}>
+    /* marginTop: -60 for cover header background showing while navigating
+      to influencer page before playing video */
+    <Layout style={{flex: 1, marginTop: -60}}>
       <View style={styles.videoContainer}>
         <Video
           source={{
@@ -107,14 +98,15 @@ export function InfluencerScreen({route, navigation}) {
             setPlayer(ref);
           }}
           muted={muteStatus}
-          repeat={false}
-          onBuffer={() => onBuffer()}
-          onError={() => onVideoError()}
+          repeat={true}
           style={styles.video}
           resizeMode={'cover'}
         />
+      </View>
+      <View>
         <Animated.ScrollView
           onScroll={onScroll({y: translationY})}
+          onScrollBeginDrag={() => setMuteStatus(true)}
           showVerticalScrollIndicator={false}
           scrollEventThrottle={1}>
           <Animated.View style={[styles.buttonContainer, {opacity}]}>
@@ -127,6 +119,13 @@ export function InfluencerScreen({route, navigation}) {
               {data.influencer.category.name}
             </Animated.Text>
             <Button status="success">예약하기 {data.influencer.price}</Button>
+            <Button
+              appearance="ghost"
+              status="basic"
+              style={styles.muteButton}
+              icon={muteStatus ? VolumeOnIcon : VolumeOffIcon}
+              onPress={muteButtonPressed}
+            />
           </Animated.View>
           <View style={styles.contentContainer}>
             <Rating
@@ -169,19 +168,6 @@ export function InfluencerScreen({route, navigation}) {
             </Text>
           </View>
         </Animated.ScrollView>
-        <Button
-          appearance="ghost"
-          status="basic"
-          style={styles.muteButton}
-          icon={
-            player
-              ? player.props.muted
-                ? VolumeOffIcon
-                : VolumeOnIcon
-              : VolumeOffIcon
-          }
-          onPress={muteButtonPressed}
-        />
         <Animated.View
           style={{
             position: 'absolute',
@@ -204,7 +190,7 @@ const styles = StyleSheet.create({
   videoContainer: {
     flex: 1,
     flexDirection: 'column',
-    position: 'relative',
+    backgroundColor: 'grey',
   },
   video: {
     height: height,
@@ -226,8 +212,9 @@ const styles = StyleSheet.create({
     height: 30,
     position: 'absolute',
     left: 20,
-    top: height / 2,
+    top: height / 1.6,
     backgroundColor: 'white',
+
     borderRadius: 20,
   },
   buttonContainer: {

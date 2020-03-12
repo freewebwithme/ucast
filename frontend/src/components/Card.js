@@ -21,7 +21,6 @@ export const InfluencerCard = props => {
   return (
     <Card
       onPress={() => {
-        console.log('Card clicked');
         navigations.navigate('InfluencerScreen', {
           influencer: influencer,
         });
