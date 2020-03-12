@@ -17,12 +17,12 @@ const windowWidth = Dimensions.get('window').width;
 export function InfluencerHeader(props) {
   const {scene, previous, navigation} = props;
   const insets = useSafeArea();
-
+  console.log('PRINTING INSETS: ', insets);
   const opacity = scene.route.params.opacity;
   return (
     <React.Fragment>
       <Animated.View
-        style={[styles.headerStyle, {opacity, paddingTop: insets.top}]}>
+        style={[styles.headerStyle, {opacity, marginTop: insets.top - 7}]}>
         <View style={[styles.influencerNameContainer]}>
           <Text style={styles.influencerName}>
             {scene.route.params.influencer.user.name}

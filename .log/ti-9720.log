@@ -1,0 +1,38 @@
+[19:36:25.109] Global cache location '/Users/taekim/Library/Caches/typescript/3.8', safe file path '/users/taekim/.emacs.d/.cache/lsp/npm/typescript/lib/node_modules/typescript/lib/typingsafelist.json', types map path /users/taekim/.emacs.d/.cache/lsp/npm/typescript/lib/node_modules/typescript/lib/typesmap.json
+[19:36:25.110] Processing cache location '/Users/taekim/Library/Caches/typescript/3.8'
+[19:36:25.110] Trying to find '/Users/taekim/Library/Caches/typescript/3.8/package.json'...
+[19:36:25.127] Loaded content of '/Users/taekim/Library/Caches/typescript/3.8/package.json': {"private":true,"dependencies":{"types-registry":"^0.1.481"},"devDependencies":{"@types/keymirror":"^0.1.1","@types/react-native":"^0.61.21","@types/react-native-video":"^5.0.1"}}
+[19:36:25.128] Loaded content of '/Users/taekim/Library/Caches/typescript/3.8/package-lock.json'
+[19:36:25.137] Adding entry into typings cache: 'keymirror' => '/Users/taekim/Library/Caches/typescript/3.8/node_modules/@types/keymirror/index.d.ts'
+[19:36:25.142] Adding entry into typings cache: 'react-native' => '/Users/taekim/Library/Caches/typescript/3.8/node_modules/@types/react-native/index.d.ts'
+[19:36:25.158] Adding entry into typings cache: 'react-native-video' => '/Users/taekim/Library/Caches/typescript/3.8/node_modules/@types/react-native-video/index.d.ts'
+[19:36:25.158] Finished processing cache location '/Users/taekim/Library/Caches/typescript/3.8'
+[19:36:25.159] Process id: 9731
+[19:36:25.159] NPM location: /usr/local/bin/npm (explicit '--npmLocation' not  provided)
+[19:36:25.159] validateDefaultNpmLocation: false
+[19:36:25.160] Npm config file: /Users/taekim/Library/Caches/typescript/3.8/package.json
+[19:36:25.160] Updating types-registry npm package...
+[19:36:25.160] Exec: /usr/local/bin/npm install --ignore-scripts types-registry@latest
+[19:36:26.290]     Succeeded. stdout:
+    + types-registry@0.1.481
+    updated 1 package and audited 14 packages in 0.4s
+found 0 vulnerabilities
+
+
+[19:36:26.290] Updated types-registry npm package
+[19:36:30.331] Got install request {"projectName":"/dev/null/inferredProject1*","fileNames":["/Users/taekim/.emacs.d/.cache/lsp/npm/typescript/lib/node_modules/typescript/lib/lib.d.ts","/Users/taekim/.emacs.d/.cache/lsp/npm/typescript/lib/node_modules/typescript/lib/lib.es5.d.ts","/Users/taekim/.emacs.d/.cache/lsp/npm/typescript/lib/node_modules/typescript/lib/lib.dom.d.ts","/Users/taekim/.emacs.d/.cache/lsp/npm/typescript/lib/node_modules/typescript/lib/lib.webworker.importscripts.d.ts","/Users/taekim/.emacs.d/.cache/lsp/npm/typescript/lib/node_modules/typescript/lib/lib.scripthost.d.ts","/Users/taekim/Projects/ucast/frontend/src/queries/InfluencerQuery.js","/Users/taekim/Projects/ucast/frontend/src/styles/Icons.js","/Users/taekim/Projects/ucast/frontend/src/screens/home/InfluencerScreen.js"],"compilerOptions":{"target":1,"jsx":1,"allowNonTsExtensions":true,"allowJs":true,"noEmitForJsFiles":true,"maxNodeModuleJsDepth":2},"typeAcquisition":{"enable":true,"include":[],"exclude":[]},"unresolvedImports":[],"projectRootPath":"/Users/taekim/Projects/ucast/frontend/src/screens/home","kind":"discover"}
+[19:36:30.347] Loaded safelist from types map file '/users/taekim/.emacs.d/.cache/lsp/npm/typescript/lib/node_modules/typescript/lib/typesmap.json'
+[19:36:30.348] Explicitly included types: []
+[19:36:30.350] Inferred typings from unresolved imports: []
+[19:36:30.350] Result: {"cachedTypingPaths":[],"newTypingNames":[],"filesToWatch":["/Users/taekim/Projects/ucast/frontend/src/queries/bower_components","/Users/taekim/Projects/ucast/frontend/src/queries/node_modules","/Users/taekim/Projects/ucast/frontend/src/styles/bower_components","/Users/taekim/Projects/ucast/frontend/src/styles/node_modules","/Users/taekim/Projects/ucast/frontend/src/screens/home/bower_components","/Users/taekim/Projects/ucast/frontend/src/screens/home/node_modules"]}
+[19:36:30.350] Finished typings discovery: {"cachedTypingPaths":[],"newTypingNames":[],"filesToWatch":["/Users/taekim/Projects/ucast/frontend/src/queries/bower_components","/Users/taekim/Projects/ucast/frontend/src/queries/node_modules","/Users/taekim/Projects/ucast/frontend/src/styles/bower_components","/Users/taekim/Projects/ucast/frontend/src/styles/node_modules","/Users/taekim/Projects/ucast/frontend/src/screens/home/bower_components","/Users/taekim/Projects/ucast/frontend/src/screens/home/node_modules"]}
+[19:36:30.351] DirectoryWatcher:: Added:: WatchInfo: /Users/taekim/Projects/ucast/frontend/src/queries/bower_components
+[19:36:30.352] DirectoryWatcher:: Added:: WatchInfo: /Users/taekim/Projects/ucast/frontend/src/queries/node_modules
+[19:36:30.353] DirectoryWatcher:: Added:: WatchInfo: /Users/taekim/Projects/ucast/frontend/src/styles/bower_components
+[19:36:30.353] DirectoryWatcher:: Added:: WatchInfo: /Users/taekim/Projects/ucast/frontend/src/styles/node_modules
+[19:36:30.353] DirectoryWatcher:: Added:: WatchInfo: /Users/taekim/Projects/ucast/frontend/src/screens/home/bower_components
+[19:36:30.353] DirectoryWatcher:: Added:: WatchInfo: /Users/taekim/Projects/ucast/frontend/src/screens/home/node_modules
+[19:36:30.354] Sending response:
+    {"projectName":"/dev/null/inferredProject1*","typeAcquisition":{"enable":true,"include":[],"exclude":[]},"compilerOptions":{"target":1,"jsx":1,"allowNonTsExtensions":true,"allowJs":true,"noEmitForJsFiles":true,"maxNodeModuleJsDepth":2},"typings":[],"unresolvedImports":[],"kind":"action::set"}
+[19:36:30.354] Response has been sent.
+[19:36:30.354] No new typings were requested as a result of typings discovery
