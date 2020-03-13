@@ -5,7 +5,7 @@ import gql from 'graphql-tag';
 import {GoogleSignin, statusCodes} from '@react-native-community/google-signin';
 import {useMutation} from '@apollo/react-hooks';
 import {storage} from '../utils/Storage';
-import {UserTokenContext} from '../navigations/AppNavigator';
+import {AuthContext} from '../navigations/AppNavigator';
 import {Layout, Text, Button, Icon} from '@ui-kitten/components';
 
 const bgImage = require('../assets/images/pic2.jpg');
@@ -51,7 +51,7 @@ async function googleSignIn() {
 
 export function LandingScreen({navigation}) {
   const [error, setError] = useState(null);
-  const userTokenContext = React.useContext(UserTokenContext);
+  const {signIn} = React.useContext(AuthContext);
 
   /* Sign in with Google useMutation */
   const [sign_in_google, {loading}] = useMutation(SIGN_IN_GOOGLE, {
@@ -62,8 +62,7 @@ export function LandingScreen({navigation}) {
         console.log('Printing onCompleted:', token);
         await storage.set('userToken', token);
         console.log('Printing navigation', navigation);
-        userTokenContext(token);
-        navigation.navigate('Home');
+        signIn(token);
       } else {
         console.log('No data');
       }

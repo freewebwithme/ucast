@@ -11,13 +11,17 @@ import {
   BellIcon,
   LockIcon,
   FileTextIcon,
+  LogOutIcon,
 } from '../../styles/Icons';
 import {GET_USER_INFO} from '../../queries/UserQuery';
+import {storage} from '../../utils/Storage';
+import {AuthContext} from '../../navigations/AppNavigator';
 
 export function ProfileScreen(props) {
   const {loading, error, data, refetch} = useQuery(GET_USER_INFO);
   const userInfo = data;
   const {navigation} = props;
+  const {signOut} = React.useContext(AuthContext);
 
   if (error) return <Text>{error.message}</Text>;
   if (loading) return <Text>Loading...</Text>;
@@ -87,6 +91,16 @@ export function ProfileScreen(props) {
           icon={FileTextIcon}
           status="info">
           Terms & Service
+        </Button>
+        <Button
+          style={styles.fullWidthButton}
+          appearance="outline"
+          icon={LogOutIcon}
+          onPress={() => {
+            signOut();
+          }}
+          status="danger">
+          로그아웃
         </Button>
       </Layout>
     </Layout>

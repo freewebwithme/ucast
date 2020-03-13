@@ -105,7 +105,8 @@ defmodule UCast.Seeds do
 
     for z <- 0..199 do
       create_review(Enum.random(all_customers), Enum.random(all_influencers), %{
-        content: Enum.random(@reviews)
+        content: Enum.random(@reviews),
+        rating: Enum.random(1..5)
       })
     end
   end

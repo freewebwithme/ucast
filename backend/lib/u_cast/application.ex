@@ -14,9 +14,9 @@ defmodule UCast.Application do
       UCastWeb.Endpoint,
       # Starts a worker by calling: UCast.Worker.start_link(arg)
       # {UCast.Worker, arg},
-      {Absinthe.Subscription, [UCastWeb.Endpoint]}
+      {Absinthe.Subscription, [UCastWeb.Endpoint]},
       # TODO: Uncomment when testing front end
-      # {UCast.MyStrategy, time_interval: 60_000}
+      {UCast.MyStrategy, time_interval: 60_000}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

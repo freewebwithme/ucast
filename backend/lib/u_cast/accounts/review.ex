@@ -7,6 +7,7 @@ defmodule UCast.Accounts.Review do
   alias UCast.Accounts.{User, InfluencerProfile, Review}
 
   schema "reviews" do
+    field(:rating, :integer)
     field(:content, :string)
 
     belongs_to(:influencer_profile, InfluencerProfile)
@@ -17,8 +18,9 @@ defmodule UCast.Accounts.Review do
 
   def changeset(%Review{} = review, attrs) do
     review
-    |> cast(attrs, [:content])
-    |> validate_required(:content)
+    |> cast(attrs, [:content, :rating])
+    |> validate_required(:content, :rating)
+    |> validate_number(:rating, greate_than_or_equal_to: 1, less_than_or_equal_to: 5)
     |> validate_length(:content, min: 3, max: 300)
   end
 end

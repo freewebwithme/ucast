@@ -11,6 +11,7 @@ import {Rating, AirbnbRating} from 'react-native-elements';
 import {GET_INFLUENCER} from '../../queries/InfluencerQuery';
 import {VolumeOffIcon, VolumeOnIcon} from '../../styles/Icons';
 import {useSafeArea} from 'react-native-safe-area-context';
+import {CommonActions} from '@react-navigation/native';
 
 const {height} = Dimensions.get('window');
 const BUTTON_CONTAINER_HEIGHT = height / 1.5;
@@ -33,10 +34,12 @@ export function InfluencerScreen({route, navigation}) {
   /* Pass animated value (headeOpacity) for
     header opacity animation */
   React.useEffect(() => {
-    navigation.setParams({
-      opacity: headerOpacity,
-    });
-  }, [navigation]);
+    navigation.dispatch(
+      CommonActions.setParams({
+        opacity: headerOpacity,
+      }),
+    );
+  }, []);
 
   const {influencer} = route.params;
   const {loading, error, data} = useQuery(GET_INFLUENCER, {
@@ -140,7 +143,13 @@ export function InfluencerScreen({route, navigation}) {
             </Text>
             <View style={{flexDirection: 'row'}}>
               {data.influencer.tags.map(tag => (
-                <Chip key={tag.id} style={{marginHorizontal: 5}}>
+                <Chip
+                  key={tag.id}
+                  textStyle={{color: 'white'}}
+                  style={{
+                    marginHorizontal: 5,
+                    backgroundColor: '#42AAFF',
+                  }}>
                   {tag.name}
                 </Chip>
               ))}

@@ -3,6 +3,7 @@ import {Icon} from '@ui-kitten/components';
 
 export const LoadingIcon = style => <Icon {...style} name="loader-outline" />;
 export const LogInIcon = style => <Icon {...style} name="log-in-outline" />;
+export const LogOutIcon = style => <Icon {...style} name="log-out-outline" />;
 
 export const RightArrowIcon = style => (
   <Icon {...style} name="arrow-forward-outline" />
