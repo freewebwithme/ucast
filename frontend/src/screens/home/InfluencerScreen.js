@@ -1,6 +1,6 @@
 import React from 'react';
 import {ScrollView, StyleSheet, View, Dimensions} from 'react-native';
-import {Layout, Text, Button} from '@ui-kitten/components';
+import {Layout, Text, Button, Modal} from '@ui-kitten/components';
 import {useQuery} from '@apollo/react-hooks';
 import Video from 'react-native-video';
 import Animated from 'react-native-reanimated';
@@ -12,19 +12,58 @@ import {GET_INFLUENCER} from '../../queries/InfluencerQuery';
 import {VolumeOffIcon, VolumeOnIcon} from '../../styles/Icons';
 import {useSafeArea} from 'react-native-safe-area-context';
 import {CommonActions} from '@react-navigation/native';
+import {RequestCameoModal} from '../../components/RequestCameoModal';
 
 const {height} = Dimensions.get('window');
 const BUTTON_CONTAINER_HEIGHT = height / 1.5;
 
 const {Value, interpolate, Extrapolate} = Animated;
-
 const translationY = new Value(0);
+
+export const VideoDispatch = React.createContext();
 
 export function InfluencerScreen({route, navigation}) {
   const insets = useSafeArea();
 
   const [player, setPlayer] = React.useState(null);
-  const [muteStatus, setMuteStatus] = React.useState(true);
+  const [modalVisible, setModalVisible] = React.useState(false);
+
+  const [state, dispatch] = React.useReducer(
+    (prevState, action) => {
+      switch (action.type) {
+        case 'MUTE':
+          console.log('Printing prevState: ', prevState);
+          return {
+            ...prevState,
+            muteStatus: action.mute,
+          };
+        case 'PAUSE':
+          return {
+            ...prevState,
+            pausedStatus: true,
+          };
+
+        case 'MUTE_AND_PAUSE':
+          return {
+            ...prevState,
+            muteStatus: true,
+            pausedStatus: true,
+          };
+
+        case 'PLAY':
+          console.log('PLAY called');
+          return {
+            ...prevState,
+            muteStatus: true,
+            pausedStatus: false,
+          };
+      }
+    },
+    {
+      muteStatus: true,
+      pausedStatus: false,
+    },
+  );
   const headerOpacity = interpolate(translationY, {
     inputRange: [0, BUTTON_CONTAINER_HEIGHT, height - insets.top],
     outputRange: [0, 1, 1],
@@ -34,13 +73,17 @@ export function InfluencerScreen({route, navigation}) {
   /* Pass animated value (headeOpacity) for
     header opacity animation */
   React.useEffect(() => {
-    navigation.dispatch(
-      CommonActions.setParams({
-        opacity: headerOpacity,
-      }),
-    );
-  }, []);
+    function sendAnimationValue() {
+      navigation.dispatch(
+        CommonActions.setParams({
+          opacity: headerOpacity,
+        }),
+      );
+    }
+    sendAnimationValue();
+  }, [navigation]);
 
+  /* Fetch Influencer profile */
   const {influencer} = route.params;
   const {loading, error, data} = useQuery(GET_INFLUENCER, {
     variables: {id: influencer.id},
@@ -56,11 +99,9 @@ export function InfluencerScreen({route, navigation}) {
   /* Toggle mute value */
   function muteButtonPressed() {
     if (player) {
-      setMuteStatus(prev => {
-        return !prev;
-      });
+      dispatch({type: 'MUTE', mute: !state.muteStatus});
     } else {
-      return muteStatus;
+      return true;
     }
   }
 
@@ -91,6 +132,12 @@ export function InfluencerScreen({route, navigation}) {
     /* marginTop: -60 for cover header background showing while navigating
       to influencer page before playing video */
     <Layout style={{flex: 1, marginTop: -60}}>
+      <RequestCameoModal
+        videoDispatch={dispatch}
+        step1_visible={modalVisible}
+        setVisible={setModalVisible}
+        influencer={data.influencer}
+      />
       <View style={styles.videoContainer}>
         <Video
           source={{
@@ -100,7 +147,8 @@ export function InfluencerScreen({route, navigation}) {
           ref={ref => {
             setPlayer(ref);
           }}
-          muted={muteStatus}
+          muted={state.muteStatus}
+          paused={state.pausedStatus}
           repeat={true}
           style={styles.video}
           resizeMode={'cover'}
@@ -109,7 +157,7 @@ export function InfluencerScreen({route, navigation}) {
       <View>
         <Animated.ScrollView
           onScroll={onScroll({y: translationY})}
-          onScrollBeginDrag={() => setMuteStatus(true)}
+          onScrollBeginDrag={() => dispatch({type: 'MUTE', mute: true})}
           showVerticalScrollIndicator={false}
           scrollEventThrottle={1}>
           <Animated.View style={[styles.buttonContainer, {opacity}]}>
@@ -121,12 +169,24 @@ export function InfluencerScreen({route, navigation}) {
               style={{color: 'white', fontSize: 24, marginBottom: 10}}>
               {data.influencer.category.name}
             </Animated.Text>
-            <Button status="success">예약하기 {data.influencer.price}</Button>
+            <Button
+              status="success"
+              onPress={() => {
+                dispatch({type: 'MUTE_AND_PAUSE'});
+                setModalVisible(true);
+                /* Pass dispatch function to Request screen
+                  to replay video in InfluencerScreen */
+                /*navigation.navigate('RequestVideo', {
+                  influencerDispatch: dispatch,
+                });*/
+              }}>
+              예약하기 {data.influencer.price}
+            </Button>
             <Button
               appearance="ghost"
               status="basic"
               style={styles.muteButton}
-              icon={muteStatus ? VolumeOnIcon : VolumeOffIcon}
+              icon={state.muteStatus ? VolumeOnIcon : VolumeOffIcon}
               onPress={muteButtonPressed}
             />
           </Animated.View>
@@ -244,5 +304,8 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderRadius: 30,
     marginTop: 50,
+  },
+  modalContainer: {
+    flex: 1,
   },
 });

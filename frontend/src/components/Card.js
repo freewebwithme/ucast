@@ -21,9 +21,7 @@ export const InfluencerCard = props => {
   return (
     <Card
       onPress={() => {
-        navigations.navigate('InfluencerScreen', {
-          influencer: influencer,
-        });
+        navigations.navigate('Influencer', {influencer: influencer});
       }}
       style={styles.card}
       header={() => (

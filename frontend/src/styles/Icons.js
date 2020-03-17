@@ -36,3 +36,6 @@ export const VolumeOffIcon = style => (
 export const VolumeOnIcon = style => (
   <Icon {...style} name="volume-up-outline" />
 );
+
+export const CameraIcon = style => <Icon {...style} name="camera" />;
+export const GiftIcon = style => <Icon {...style} name="gift-outline" />;

@@ -23,7 +23,9 @@ export function HomeScreen(props) {
             <Text category="h5" style={styles.header}>
               {category.name}({category.total})
             </Text>
-            <ScrollView horizontal={true}>
+            <ScrollView
+              horizontal={true}
+              showsHorizontalScrollIndicator={false}>
               {category.influencerProfiles.map(profile => (
                 <View key={profile.id} style={{padding: 5}}>
                   <InfluencerCard

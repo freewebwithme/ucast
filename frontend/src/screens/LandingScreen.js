@@ -7,23 +7,9 @@ import {useMutation} from '@apollo/react-hooks';
 import {storage} from '../utils/Storage';
 import {AuthContext} from '../navigations/AppNavigator';
 import {Layout, Text, Button, Icon} from '@ui-kitten/components';
+import {SIGN_IN_GOOGLE} from '../queries/UserQuery';
 
 const bgImage = require('../assets/images/pic2.jpg');
-
-const SIGN_IN_GOOGLE = gql`
-  mutation($idToken: String!, $name: String!, $avatarUrl: String!) {
-    googleSignIn(idToken: $idToken, name: $name, avatarUrl: $avatarUrl) {
-      token
-      user {
-        email
-        name
-        providerName
-        providerId
-        avatarUrl
-      }
-    }
-  }
-`;
 
 async function googleSignIn() {
   try {
@@ -59,17 +45,15 @@ export function LandingScreen({navigation}) {
       if (data) {
         // save user token in AsyncStorage
         let token = data.googleSignIn.token;
-        console.log('Printing onCompleted:', token);
         await storage.set('userToken', token);
-        console.log('Printing navigation', navigation);
         signIn(token);
       } else {
         console.log('No data');
       }
     },
-    onError(error) {
-      console.log('Printng google sign in error:', error.message);
-      setError(error.message);
+    onError(loginError) {
+      console.log('Printing google sign in error:', loginError.message);
+      setError(loginError.message);
     },
   });
 

@@ -21,3 +21,18 @@ export const GET_USER_INFO = gql`
     }
   }
 `;
+
+export const SIGN_IN_GOOGLE = gql`
+  mutation($idToken: String!, $name: String!, $avatarUrl: String!) {
+    googleSignIn(idToken: $idToken, name: $name, avatarUrl: $avatarUrl) {
+      token
+      user {
+        email
+        name
+        providerName
+        providerId
+        avatarUrl
+      }
+    }
+  }
+`;

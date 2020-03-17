@@ -59,16 +59,19 @@ export function AppNavigator() {
     bootstrapAsync();
   }, []);
 
-  const authContext = React.useMemo(() => ({
-    signOut: async () => {
-      await storage.remove('userToken');
-      dispatch({type: 'SIGN_OUT'});
-    },
-    signIn: async token => {
-      await storage.set('userToken', token);
-      dispatch({type: 'SIGN_IN', token: token});
-    },
-  }));
+  const authContext = React.useMemo(
+    () => ({
+      signOut: async () => {
+        await storage.remove('userToken');
+        dispatch({type: 'SIGN_OUT'});
+      },
+      signIn: async token => {
+        await storage.set('userToken', token);
+        dispatch({type: 'SIGN_IN', token: token});
+      },
+    }),
+    [],
+  );
 
   return (
     <NavigationContainer>

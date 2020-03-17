@@ -1,23 +1,16 @@
 import React from 'react';
-import {
-  TouchableOpacity,
-  View,
-  StyleSheet,
-  Text,
-  Dimensions,
-} from 'react-native';
+import {View, StyleSheet, Text, Dimensions} from 'react-native';
 import {BackIcon} from '../styles/Icons';
 import {HeartIcon} from '../styles/Icons';
-import {Layout, Button} from '@ui-kitten/components';
+import {Button} from '@ui-kitten/components';
 import Animated from 'react-native-reanimated';
-import {SafeAreaView, useSafeArea} from 'react-native-safe-area-context';
+import {useSafeArea} from 'react-native-safe-area-context';
 
 const windowWidth = Dimensions.get('window').width;
 
 export function InfluencerHeader(props) {
   const {scene, previous, navigation} = props;
   const insets = useSafeArea();
-  console.log('PRINTING INSETS: ', insets);
   const opacity = scene.route.params.opacity;
   return (
     <React.Fragment>
