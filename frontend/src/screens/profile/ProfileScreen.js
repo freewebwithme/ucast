@@ -18,11 +18,20 @@ import {storage} from '../../utils/Storage';
 import {AuthContext} from '../../navigations/AppNavigator';
 
 export function ProfileScreen(props) {
-  const {loading, error, data, refetch} = useQuery(GET_USER_INFO);
+  storage.get('user').then(user => console.log('Printing user: ', user));
+  const {loading, error, data, refetch} = useQuery(GET_USER_INFO, {
+    fetchPolicy: 'no-cache',
+  });
   const userInfo = data;
+  console.log('Printing data from ProfileScreen: ', data);
   const {navigation} = props;
   const {signOut} = React.useContext(AuthContext);
 
+  //  React.useEffect(() => {
+  //    refetch();
+  //  });
+
+  console.log('Printing userInfo: ', data);
   if (error) return <Text>{error.message}</Text>;
   if (loading) return <Text>Loading...</Text>;
   return (

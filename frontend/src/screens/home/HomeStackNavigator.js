@@ -2,7 +2,7 @@ import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import {HomeScreen} from './HomeScreen';
 import {InfluencerScreen} from './InfluencerScreen';
-import {InfluencerHeader} from '../../components/InfluencerHeader';
+import {InfluencerHeader} from '../../components/influencers/InfluencerHeader';
 import {RequestStack} from './RequestStackNavigator';
 import {RequestScreen} from './RequestScreen';
 

@@ -4,7 +4,7 @@ import globalStyles from '../../styles/Global';
 import {Searchbar} from 'react-native-paper';
 import {Layout, Text} from '@ui-kitten/components';
 import {useQuery} from '@apollo/react-hooks';
-import {InfluencerCard} from '../../components/Card';
+import {InfluencerCard} from '../../components/influencers/Card';
 import {GET_INFLUENCER_FOR_HOMESCREEN} from '../../queries/InfluencerQuery';
 
 export function HomeScreen(props) {

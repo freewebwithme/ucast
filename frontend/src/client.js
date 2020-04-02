@@ -27,8 +27,9 @@ const socketLink = createAbsintheSocketLink(
 // Returns an object to set the context of the GraphQL request.
 
 const authLink = setContext(async (_, {headers}) => {
-  //await storage.remove('userToken');
+  console.log('Calling from Client');
   const token = await storage.get('userToken');
+  console.log('Printing token from Client: ', token);
   const result = {
     headers: {
       ...headers,

@@ -62,11 +62,15 @@ export function AppNavigator() {
   const authContext = React.useMemo(
     () => ({
       signOut: async () => {
+        console.log('Calling authContext.signOut()');
         await storage.remove('userToken');
+        await storage.remove('user');
         dispatch({type: 'SIGN_OUT'});
       },
-      signIn: async token => {
+      signIn: async (token, user) => {
+        console.log('Calling authContext.signIn()');
         await storage.set('userToken', token);
+        await storage.set('user', JSON.stringify(user));
         dispatch({type: 'SIGN_IN', token: token});
       },
     }),

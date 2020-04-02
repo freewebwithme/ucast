@@ -3,27 +3,14 @@ import {KeyboardAvoidingView, View, StyleSheet} from 'react-native';
 import {useMutation} from '@apollo/react-hooks';
 import formStyles from '../styles/FormStyles';
 import {validateEmailLength, validateEmailFormat} from '../utils/Validators';
-import gql from 'graphql-tag';
 import {storage} from '../utils/Storage';
-import {UserTokenContext} from '../navigations/AppNavigator';
+import {AuthContext} from '../navigations/AppNavigator';
 import {createStackNavigator} from '@react-navigation/stack';
 import {Layout, Text, Button, Input} from '@ui-kitten/components';
 import {LoadingIcon, LogInIcon, RightArrowIcon} from '../styles/Icons';
+import {SIGNUP_NEW_USER} from '../queries/UserQuery';
 
 const Stack = createStackNavigator();
-
-const SIGNUP_NEW_USER = gql`
-  mutation($email: String!, $name: String!, $password: String!) {
-    signup(email: $email, name: $name, password: $password) {
-      user {
-        name
-        email
-        avatarUrl
-      }
-      token
-    }
-  }
-`;
 
 // Step 1 for fullname
 function NameScreen({navigation}) {
@@ -104,19 +91,19 @@ function EmailScreen({navigation}) {
 
 function PasswordScreen({navigation}) {
   let info = new Map();
-  const userTokenContext = React.useContext(UserTokenContext);
+  const {signIn} = React.useContext(AuthContext);
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
   const [signUp, {loading}] = useMutation(SIGNUP_NEW_USER, {
-    onCompleted(data) {
+    async onCompleted(data) {
       console.log('Signup successful: ', data);
       const token = data.signup.token;
-      storage.remove('name');
-      storage.remove('email');
+      const user = data.signup.user;
+      await storage.remove('name');
+      await storage.remove('email');
       info = new Map();
-      storage.set('userToken', token);
-      userTokenContext(token);
-      navigation.navigate('Home');
+      signIn(token, user);
+      //navigation.navigate('Home');
     },
     onError(error) {
       console.log('Sign up error:', error.message);

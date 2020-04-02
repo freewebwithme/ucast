@@ -101,3 +101,9 @@ buck-out/
 # CocoaPods
 /ios/Pods/
 .log
+
+
+
+/_build/
+/deps/
+tags

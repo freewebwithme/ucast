@@ -1,47 +1,31 @@
 import React, {useState} from 'react';
-import {View, KeyboardAvoidingView, StyleSheet} from 'react-native';
-import {TextInput, HelperText} from 'react-native-paper';
+import {KeyboardAvoidingView, StyleSheet} from 'react-native';
 import {useMutation} from '@apollo/react-hooks';
-import gql from 'graphql-tag';
 import formStyles from '../styles/FormStyles';
 import {storage} from '../utils/Storage';
-import {UserTokenContext} from '../navigations/AppNavigator';
+import {AuthContext} from '../navigations/AppNavigator';
 import {Layout, Text, Button, Input} from '@ui-kitten/components';
 import {validateEmailFormat, validateEmailLength} from '../utils/Validators';
-
-import {LoadingIcon, LogInIcon, RightArrowIcon} from '../styles/Icons';
-
-const SIGN_IN = gql`
-  mutation($email: String!, $password: String!) {
-    signin(email: $email, password: $password) {
-      user {
-        name
-        providerId
-        providerName
-        email
-      }
-      token
-    }
-  }
-`;
+import {LoadingIcon, LogInIcon} from '../styles/Icons';
+import {SIGN_IN} from '../queries/UserQuery';
 
 export function LogInScreen({navigation}) {
   const [loginEmail, setLoginEmail] = useState('');
   const [loginPass, setLoginPass] = useState('');
   const [error, setError] = useState(null);
 
-  const userTokenContext = React.useContext(UserTokenContext);
+  const {signIn} = React.useContext(AuthContext);
   /* Plain Sign in useMutation */
 
-  const [signIn, {loading}] = useMutation(SIGN_IN, {
-    onCompleted(data) {
-      let token = data.signin.token;
-      storage.set('userToken', token);
-      /* Calling setUserToken function from AppNavigator to update userToken
+  const [plainSignIn, {loading}] = useMutation(SIGN_IN, {
+    async onCompleted(data) {
+      const token = data.signin.token;
+      const user = data.signin.user;
+      /* Calling signIn function from AppNavigator to update userToken
         and navigate to Main page */
-      userTokenContext(token);
+      signIn(token, user);
 
-      navigation.navigate('Home');
+      // navigation.navigate('Home');
     },
     onError(error) {
       console.log('Printing sign in error', error.message);
@@ -84,7 +68,7 @@ export function LogInScreen({navigation}) {
           <Button
             onPress={e => {
               e.preventDefault();
-              signIn({
+              plainSignIn({
                 variables: {
                   email: loginEmail,
                   password: loginPass,

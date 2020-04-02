@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
 import {StyleSheet, View, ImageBackground} from 'react-native';
 import globalStyles from '../styles/Global.js';
-import gql from 'graphql-tag';
 import {GoogleSignin, statusCodes} from '@react-native-community/google-signin';
 import {useMutation} from '@apollo/react-hooks';
 import {storage} from '../utils/Storage';
@@ -44,9 +43,9 @@ export function LandingScreen({navigation}) {
     async onCompleted(data) {
       if (data) {
         // save user token in AsyncStorage
-        let token = data.googleSignIn.token;
-        await storage.set('userToken', token);
-        signIn(token);
+        const token = data.googleSignIn.token;
+        const user = data.googleSignIn.user;
+        signIn(token, user);
       } else {
         console.log('No data');
       }

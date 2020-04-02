@@ -48,7 +48,7 @@ export function EditProfileScreen({route, navigation}) {
   //  return <Text>Updating....</Text>;
   //}
 
-  const {me} = client.readQuery({query: GET_USER_INFO});
+  //const {me} = client.readQuery({query: GET_USER_INFO});
 
   return (
     <Layout style={styles.mainContainer}>
@@ -56,7 +56,7 @@ export function EditProfileScreen({route, navigation}) {
         <TouchableOpacity onPress={() => pickImage()}>
           <Avatar
             size="giant"
-            source={{uri: me.avatarUrl}}
+            source={{uri: savedMe.avatarUrl}}
             style={{width: 150, height: 150, marginBottom: 50}}
           />
         </TouchableOpacity>
@@ -64,20 +64,20 @@ export function EditProfileScreen({route, navigation}) {
           label="이름"
           style={styles.marginTop20}
           onChangeText={nameInput => setName(nameInput)}>
-          {me.name}
+          {savedMe.name}
         </Input>
         <Input
           label="이메일"
           style={styles.marginTop20}
           onChangeText={emailInput => setEmail(emailInput)}>
-          {me.email}
+          {savedMe.email}
         </Input>
         <Input
           label="소개"
           size="large"
           style={styles.marginTop20}
           onChangeText={introInput => setIntro(introInput)}>
-          {me.intro}
+          {savedMe.intro}
         </Input>
       </Layout>
       <Layout

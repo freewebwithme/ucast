@@ -12,7 +12,7 @@ import {GET_INFLUENCER} from '../../queries/InfluencerQuery';
 import {VolumeOffIcon, VolumeOnIcon} from '../../styles/Icons';
 import {useSafeArea} from 'react-native-safe-area-context';
 import {CommonActions} from '@react-navigation/native';
-import {RequestCameoModal} from '../../components/RequestCameoModal';
+import {RequestCameoModal2} from '../../components/influencers/RequestCameoModal2';
 
 const {height} = Dimensions.get('window');
 const BUTTON_CONTAINER_HEIGHT = height / 1.5;
@@ -20,6 +20,8 @@ const BUTTON_CONTAINER_HEIGHT = height / 1.5;
 const {Value, interpolate, Extrapolate} = Animated;
 const translationY = new Value(0);
 
+/* I need to send dispatch to modal component because of
+   re-play paused video in influencer screen */
 export const VideoDispatch = React.createContext();
 
 export function InfluencerScreen({route, navigation}) {
@@ -28,6 +30,7 @@ export function InfluencerScreen({route, navigation}) {
   const [player, setPlayer] = React.useState(null);
   const [modalVisible, setModalVisible] = React.useState(false);
 
+  /* Video State - Play or Pause */
   const [state, dispatch] = React.useReducer(
     (prevState, action) => {
       switch (action.type) {
@@ -64,6 +67,8 @@ export function InfluencerScreen({route, navigation}) {
       pausedStatus: false,
     },
   );
+
+  /* Animation for Navigation Header */
   const headerOpacity = interpolate(translationY, {
     inputRange: [0, BUTTON_CONTAINER_HEIGHT, height - insets.top],
     outputRange: [0, 1, 1],
@@ -132,7 +137,7 @@ export function InfluencerScreen({route, navigation}) {
     /* marginTop: -60 for cover header background showing while navigating
       to influencer page before playing video */
     <Layout style={{flex: 1, marginTop: -60}}>
-      <RequestCameoModal
+      <RequestCameoModal2
         videoDispatch={dispatch}
         step1_visible={modalVisible}
         setVisible={setModalVisible}
